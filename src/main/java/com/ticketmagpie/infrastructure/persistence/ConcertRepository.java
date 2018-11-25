@@ -60,8 +60,7 @@ public class ConcertRepository {
   private byte[] getBytesFromBlob(Blob blob) throws SQLException {
     if (blob == null) {
       return null;
-    } else {
-      return blob.getBytes(1, (int) blob.length());
     }
+    return blob.getBytes(1, (int) blob.length());
   }
 }

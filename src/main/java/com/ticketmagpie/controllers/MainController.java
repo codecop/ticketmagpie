@@ -3,6 +3,7 @@ package com.ticketmagpie.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -54,11 +55,9 @@ public class MainController {
   public String registration(@RequestParam(required = false, name = "username") String username, @RequestParam(required = false, name = "password") String password, @RequestParam(required = false, name = "email") String email, @RequestParam(required = false, name = "role", defaultValue = "USER") String role) {
     if (username == null) {
       return "registration";
-    } else {
-      userRepository.save(new User(username, password, email, role));
-      return "login";
     }
-
+    userRepository.save(new User(username, password, email, role));
+    return "login";
   }
 
   @RequestMapping("/ticket")
@@ -98,8 +97,7 @@ public class MainController {
   }
 
   @RequestMapping("/concert")
-  public String concert(@RequestParam Integer id, Model model)
-      throws IOException {
+  public String concert(@RequestParam Integer id, Model model) {
     model.addAttribute("concert", concertRepository.get(id));
     model.addAttribute("comments", commentRepository.getAllForConcert(id));
     return "concert";
@@ -107,14 +105,18 @@ public class MainController {
 
   private void concertImageFromBlob(HttpServletResponse httpServletResponse, byte[] imageBlob)
       throws IOException {
-    httpServletResponse.getOutputStream().write(imageBlob);
+    try (ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
+      outputStream.write(imageBlob);
+    }
   }
 
   private void concertImageFromUrl(HttpServletResponse httpServletResponse, String imageUrl)
       throws IOException {
-    InputStream imageStream =
+    try (InputStream imageStream =
         getClass().getClassLoader().getResourceAsStream(getResourceNameForConcertImage(imageUrl));
-    IOUtils.copy(imageStream, httpServletResponse.getOutputStream());
+        ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
+      IOUtils.copy(imageStream, outputStream);
+    }
   }
 
   private String getResourceNameForConcertImage(String imageUrl) {

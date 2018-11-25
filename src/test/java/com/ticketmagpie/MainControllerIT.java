@@ -36,7 +36,7 @@ public class MainControllerIT {
   }
 
   @Test
-  public void getHello() throws Exception {
+  public void getHello() {
     ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
     assertThat(response.getBody(), containsString("<p>Hello Spring Boot!</p>"));
   }

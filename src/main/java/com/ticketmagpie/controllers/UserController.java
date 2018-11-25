@@ -1,7 +1,5 @@
 package com.ticketmagpie.controllers;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -65,8 +63,7 @@ public class UserController {
   }
 
   @RequestMapping("/comment")
-  public String comment(@RequestParam("concertId") Integer concertId, @RequestParam("user") String user, @RequestParam("text") String text, Model model)
-      throws IOException {
+  public String comment(@RequestParam("concertId") Integer concertId, @RequestParam("user") String user, @RequestParam("text") String text, Model model) {
     Comment newComment = new Comment(concertId, user, text);
     commentRepository.save(newComment);
     return mainController.concert(concertId, model);
