@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest({"server.port=0"})
+@IntegrationTest({"server.port=0", "spring.profiles.active=hsqldb"})
 public class MainControllerIT {
 
   @Value("${local.server.port}")
@@ -31,13 +31,13 @@ public class MainControllerIT {
 
   @Before
   public void setUp() throws Exception {
-    this.base = new URL("http://localhost:" + port + "/");
+    this.base = new URL("http://localhost:" + port + '/');
     template = new TestRestTemplate();
   }
 
   @Test
-  public void getHello() {
+  public void getTicketMagpie() {
     ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
-    assertThat(response.getBody(), containsString("<p>Hello Spring Boot!</p>"));
+    assertThat(response.getBody(), containsString("<title>TicketMagpie - the place to get all the tickets!</title>"));
   }
 }
