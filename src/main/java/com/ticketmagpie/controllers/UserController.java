@@ -63,7 +63,10 @@ public class UserController {
   }
 
   @RequestMapping("/comment")
-  public String comment(@RequestParam("concertId") Integer concertId, @RequestParam("user") String user, @RequestParam("text") String text, Model model) {
+  public String comment
+      (@RequestParam("concertId") Integer concertId, 
+          @RequestParam("user") String user, 
+          @RequestParam("text") String text, Model model) {
     Comment newComment = new Comment(concertId, user, text);
     commentRepository.save(newComment);
     return mainController.concert(concertId, model);

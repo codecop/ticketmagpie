@@ -52,7 +52,11 @@ public class MainController {
   }
 
   @RequestMapping("/registration")
-  public String registration(@RequestParam(required = false, name = "username") String username, @RequestParam(required = false, name = "password") String password, @RequestParam(required = false, name = "email") String email, @RequestParam(required = false, name = "role", defaultValue = "USER") String role) {
+  public String registration
+      (@RequestParam(required = false, name = "username") String username, 
+          @RequestParam(required = false, name = "password") String password, 
+          @RequestParam(required = false, name = "email") String email, 
+          @RequestParam(required = false, name = "role", defaultValue = "USER") String role) {
     if (username == null) {
       return "registration";
     }

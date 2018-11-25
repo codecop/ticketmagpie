@@ -32,11 +32,13 @@ public class TicketMagPieAuthenticationProvider implements AuthenticationProvide
     return toAuthentication(user);
   }
 
-  private Authentication toAuthentication(User user) {return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), singleton(new SimpleGrantedAuthority(user.getRole())));}
+  private Authentication toAuthentication(User user) {
+    return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(),
+        singleton(new SimpleGrantedAuthority(user.getRole())));
+  }
 
   @Override
   public boolean supports(Class<?> authentication) {
-    return (UsernamePasswordAuthenticationToken.class
-        .isAssignableFrom(authentication));
+    return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
   }
 }

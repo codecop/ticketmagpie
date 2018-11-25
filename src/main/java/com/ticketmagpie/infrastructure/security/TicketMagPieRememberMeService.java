@@ -51,13 +51,14 @@ public class TicketMagPieRememberMeService implements RememberMeServices, Logout
   }
 
   private Cookie cookieForUser(UsernamePasswordAuthenticationToken authentication) {
-    Cookie cookie =
-        new Cookie(COOKIE_NAME, encrypt(authentication));
+    Cookie cookie = new Cookie(COOKIE_NAME, encrypt(authentication));
     cookie.setMaxAge(ONE_DAY_IN_SECONDS);
     return cookie;
   }
 
-  private String encrypt(UsernamePasswordAuthenticationToken authentication) {return Base64.encodeBase64String((authentication.getName() + "|" + authentication.getCredentials()).getBytes());}
+  private String encrypt(UsernamePasswordAuthenticationToken authentication) {
+    return Base64.encodeBase64String((authentication.getName() + "|" + authentication.getCredentials()).getBytes());
+  }
 
   @Override
   public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
