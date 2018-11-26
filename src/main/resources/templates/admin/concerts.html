@@ -12,11 +12,11 @@
     <div class="wrapper">
         <div class="container">
             <table>
-                <thead>
+                <thead><tr>
                 <td><b>Band</b></td>
                 <td><b>Date</b></td>
                 <td></td>
-                </thead>
+                </tr></thead>
                 <tbody>
                 <tr th:each="concert : ${concerts}">
                     <td th:text="${concert.band}"></td>
@@ -42,7 +42,6 @@
                            name="date"/>
                 </div>
                 <div><label>Description:</label>
-                    <textarea name="description"/>
                 </div>
                 <div><label>Image:</label>
                     <input type="file" accept="image/*" name="image" />

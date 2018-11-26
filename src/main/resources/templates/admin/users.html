@@ -12,12 +12,12 @@
     <div class="wrapper">
         <div class="container">
             <table>
-                <thead>
+                <thead><tr>
                 <td><b>Name</b></td>
                 <td><b>Email</b></td>
                 <td><b>Role</b></td>
                 <td></td>
-                </thead>
+                </tr></thead>
                 <tbody>
                 <tr th:each="user : ${users}">
                     <td th:text="${user.username}"></td>
