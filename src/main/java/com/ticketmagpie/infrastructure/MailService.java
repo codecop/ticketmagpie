@@ -11,36 +11,46 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MailService {
 
-  public static final Properties SESSION_PROPERTIES = new Properties();
+  public final Properties sessionProperties = new Properties();
+  public final Authenticator authenticator;
+  private final String username;
 
-  static {
-    SESSION_PROPERTIES.put("mail.smtp.auth", "true");
-    SESSION_PROPERTIES.put("mail.smtp.starttls.enable", "true");
-    SESSION_PROPERTIES.put("mail.smtp.host", "smtp.gmail.com");
-    SESSION_PROPERTIES.put("mail.smtp.port", "587");
+  @Autowired
+  public MailService(@Value("${mail.smtp.auth}") boolean smtpAuth,
+                     @Value("${mail.smtp.starttls.enable}") boolean tlsEnabled,
+                     @Value("${mail.smtp.host}") String smtpHost,
+                     @Value("${mail.smtp.port}") int smtpPort,
+                     @Value("${mail.smtp.username}") String username,
+                     @Value("${mail.smtp.password}") String password) {
+
+    sessionProperties.put("mail.smtp.auth", Boolean.toString(smtpAuth));
+    sessionProperties.put("mail.smtp.starttls.enable", Boolean.toString(tlsEnabled));
+    sessionProperties.put("mail.smtp.host", smtpHost);
+    sessionProperties.put("mail.smtp.port", Integer.toString(smtpPort));
+
+    authenticator = new Authenticator() {
+      @Override
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(username, password);
+      }
+    };
+    this.username = username;
   }
 
-  public static final String USERNAME = "ticketmagpie@gmail.com";
-  public static final String PASSWORD = "t1ck3tm4gp1e1";
-  public static final Authenticator AUTHENTICATOR = new Authenticator() {
-    @Override
-    protected PasswordAuthentication getPasswordAuthentication() {
-      return new PasswordAuthentication(USERNAME, PASSWORD);
-    }
-  };
-
   public void sendEmail(String to, String subject, String body) {
-    Session session = Session.getInstance(SESSION_PROPERTIES, AUTHENTICATOR);
+    Session session = Session.getInstance(sessionProperties, authenticator);
 
     try {
 
       Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress(USERNAME));
+      message.setFrom(new InternetAddress(username));
       message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
       message.setSubject(subject);
       message.setText(body);

@@ -60,3 +60,17 @@ If you do not have a database server, you can run the application with an HSQLDB
 ```
 mvn spring-boot:run -Dspring.profiles.active=hsqldb
 ```
+
+Email configuration
+-------------------
+
+To send password recovery emails you need to configure an SMTP server with credentials. 
+
+You can pass the email configuration as follows:
+
+```
+mvn spring-boot:run -Dmail.smtp.host=SMTP_SERVER \ 
+                    -Dmail.smtp.port=587 \
+                    -Dmail.smtp.username=USER@DOMAIN.COM \
+                    -Dmail.smtp.password=PASSWORD
+```
