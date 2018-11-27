@@ -15,7 +15,7 @@
             <div class="row">
                 <section class="6u 12u(narrower) feature" th:each="concert : ${concerts}">
                     <a th:href="@{/concert(id=${concert.id})}">
-                        <div class="image-wrapper first">
+                        <div class="image-wrapper first" th:if="${concert.hasImage}">
                             <div class="image featured first"><img
                                     th:src="@{/concertimage(id=${concert.id})}"/></div>
                         </div>

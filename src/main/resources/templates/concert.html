@@ -13,7 +13,7 @@
     <div class="wrapper">
         <div class="container">
             <div class="row">
-                <div class="image-wrapper first">
+                <div class="image-wrapper first" th:if="${concert.hasImage}">
                     <a href="#" class="image featured first"><img
                             th:src="@{/concertimage(id=${concert.id})}"/></a>
                 </div>

@@ -39,6 +39,11 @@ public class Concert {
     return imageBlob;
   }
 
+  public boolean getHasImage() {
+    return getImageUrl() != null || 
+        (getImageBlob() != null && getImageBlob().length > 0);
+  }
+  
   @Override
   public String toString() {
     return "Concert{" +
