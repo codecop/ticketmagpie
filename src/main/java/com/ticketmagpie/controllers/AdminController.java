@@ -4,12 +4,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ticketmagpie.Concert;
@@ -59,6 +62,12 @@ public class AdminController {
     return "admin/concerts";
   }
 
+  @RequestMapping(value = "/concerts.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
+  @ResponseBody
+  public List<Concert> exportConcerts() {
+    return concertRepository.getAllConcerts();
+  }
+  
   @RequestMapping(value = "/concerts/delete", method = POST)
   public String deleteConcert(@RequestParam("id") int id, Model model) {
     concertRepository.delete(id);
