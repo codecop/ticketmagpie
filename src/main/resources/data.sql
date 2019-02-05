@@ -10,3 +10,6 @@ INSERT INTO concerts (band, concert_date, description, image_url) VALUES ('The P
 INSERT INTO users (username, email, password, role) VALUES ('john', 'ticketmagpie.john@yopmail.com', 'jpass', 'USER');
 INSERT INTO users (username, email, password, role) VALUES ('mark', 'ticketmagpie.mark@yopmail.com', 'mpass', 'ADMIN');
 INSERT INTO users (username, email, password, role) VALUES ('danbilling', 'ticketmagpie.danbilling@yopmail.com', 't4rd1s1963', 'USER');
+INSERT INTO users (username, email, password, role) VALUES ('admin', 'ticketmagpie.admin@yopmail.com', 'admin', 'ADMIN');
+INSERT INTO users (username, email, password, role) VALUES ('marketing', 'ticketmagpie.marketing@yopmail.com', 'kfk73$23Hceu', 'USER');
+INSERT INTO users (username, email, password, role) VALUES ('test', 'ticketmagpie.test@yopmail.com', 'qbj48!08Mjvm', 'USER');
