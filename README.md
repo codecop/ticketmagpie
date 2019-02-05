@@ -5,6 +5,7 @@ This project aims at demonstrating various security vulnerabilities such as the 
 
 Configuration
 -------------
+
 This project requires [Maven 3](https://maven.apache.org/) and
 [Java Development Kit version 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html/).
 The project does not work with Java 9. 
@@ -44,7 +45,13 @@ Database configuration
 ----------------------
 
 By default, the application expects a MySQL database to be available on localhost, default port 3306.
-The application will use the user `root` to connect to a database called `ticketmagpie`.
+The application will use the user `root` to connect to a database called `ticketmagpie`. To run the latest
+MySQL docker image with that configuration:
+
+```
+docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+              -e MYSQL_DATABASE=ticketmagpie -p 3306:3306 "mysql:latest"
+```
 
 You can pass custom database configuration as follows:
 
@@ -56,7 +63,6 @@ mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://MYSQL_SERVER:PORT/DB_NA
 
 If you do not have a database server, you can run the application with an HSQLDB in-memory database:
 
-
 ```
 mvn spring-boot:run -Dspring.profiles.active=hsqldb
 ```
@@ -64,7 +70,7 @@ mvn spring-boot:run -Dspring.profiles.active=hsqldb
 Email configuration
 -------------------
 
-To send password recovery emails you need to configure an SMTP server with credentials. 
+To send password recovery email you need to configure an SMTP server with credentials. 
 
 You can pass the email configuration as follows:
 
