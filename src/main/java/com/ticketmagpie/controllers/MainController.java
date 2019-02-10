@@ -116,6 +116,12 @@ public class MainController {
 
   private void concertImageFromUrl(HttpServletResponse httpServletResponse, String imageUrl)
       throws IOException {
+    
+    if (imageUrl.startsWith("http")) {
+        httpServletResponse.sendRedirect(imageUrl);
+        return;
+    }
+    
     try (InputStream imageStream =
         getClass().getClassLoader().getResourceAsStream(getResourceNameForConcertImage(imageUrl));
         ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {

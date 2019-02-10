@@ -78,9 +78,11 @@ public class AdminController {
   public String createConcert(@RequestParam("band") String band,
       @RequestParam("date") String date,
       @RequestParam("description") String description,
+      @RequestParam("imageUrl") String imageUrl,
       @RequestParam("image") MultipartFile imageAsMultipartFile,
       Model model) throws IOException {
-    concertRepository.save(new Concert(null, band, date, description, null, imageAsMultipartFile.getBytes()));
+    concertRepository.save(
+        new Concert(null, band, date, description, imageUrl.isEmpty() ? null : imageUrl, imageAsMultipartFile.getBytes()));
     return listConcerts(model);
   }
 }

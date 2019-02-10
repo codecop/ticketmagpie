@@ -41,14 +41,16 @@ public class ConcertRepository {
   }
 
   public void save(Concert concert) {
-    jdbcTemplate.update("INSERT INTO concerts (band, concert_date, description, image_blob) VALUES (?,?,?,?)",
+    jdbcTemplate.update("INSERT INTO concerts (band, concert_date, description, image_url, image_blob) VALUES (?,?,?,?,?)",
         new Object[] {
             concert.getBand(),
             concert.getDate(),
             concert.getDescription(),
+            concert.getImageUrl(),
             new SqlLobValue(concert.getImageBlob())
         },
         new int[] {
+            Types.VARCHAR,
             Types.VARCHAR,
             Types.VARCHAR,
             Types.VARCHAR,
