@@ -50,6 +50,6 @@ public class ConcertResource {
 
   @Override
   public String toString() {
-    return "ConcertEntity{" + "id='" + id + '\'' + ", band='" + band + '\'' + ", description='" + description + '\'' + '}';
+    return "ConcertResource{" + "id='" + id + '\'' + ", band='" + band + '\'' + ", description='" + description + '\'' + '}';
   }
 }

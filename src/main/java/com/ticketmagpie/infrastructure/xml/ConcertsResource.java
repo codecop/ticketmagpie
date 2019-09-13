@@ -23,6 +23,6 @@ public class ConcertsResource {
 
   @Override
   public String toString() {
-    return "ConcertsEntity{" + "concerts=" + concerts + '}';
+    return "ConcertsResource{" + "concerts=" + concerts + '}';
   }
 }
