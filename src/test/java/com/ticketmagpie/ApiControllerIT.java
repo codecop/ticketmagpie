@@ -1,5 +1,6 @@
 package com.ticketmagpie;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -41,15 +43,14 @@ public class ApiControllerIT {
 
   @Test
   public void listAllConcerts() {
-    // see https://stackoverflow.com/a/21637522/104143
-
-    String controlXml = "" //
+    String expectedXml = "" //
         + "<concerts>" //
         + "  <concert>" //
         + "    <id>0</id>" //
         + "    <band>Lake Malawi</band>" //
         + "    <date>July 15th</date>" //
-        + "    <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description></concert>" //
+        + "    <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
+        + "  </concert>" //
         + "  <concert>" //
         + "    <id>1</id>" //
         + "    <band>The Players</band>" //
@@ -57,19 +58,41 @@ public class ApiControllerIT {
         + "    <description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description>" //
         + "  </concert>" //
         + "</concerts>";
-
-    String responseXml = requestApi("/api/concerts.xml");
-
-    assertThat(responseXml, CompareMatcher.isIdenticalTo(controlXml).ignoreWhitespace().ignoreComments());
+    ResponseEntity<String> response = requestApi("/api/concerts.xml");
+    assertXmlBodyEquals(expectedXml, response);
   }
 
-  private String requestApi(String path) {
+  @Test
+  public void getConcert() {
+    ResponseEntity<String> noResponse = requestApi("/api/concerts/3.xml");
+    assertEquals(HttpStatus.NOT_FOUND, noResponse.getStatusCode());
+
+    String expectedXml = "" //
+        + "<concert>" //
+        + "  <id>0</id>" //
+        + "  <band>Lake Malawi</band>" //
+        + "  <date>July 15th</date>" //
+        + "  <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
+        + "</concert>";
+    ResponseEntity<String> response = requestApi("/api/concerts/0.xml");
+    assertXmlBodyEquals(expectedXml, response);
+  }
+
+  private ResponseEntity<String> requestApi(String path) {
+    // see https://stackoverflow.com/a/21637522/104143
+
     // Set XML content type explicitly to force response in XML (If not spring gets response in JSON)
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
     HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-    ResponseEntity<String> response = template.exchange(apiBaseUrl + path, HttpMethod.GET, entity, String.class);
-    return response.getBody();
+    return template.exchange(apiBaseUrl + path, HttpMethod.GET, entity, String.class);
+  }
+
+  private void assertXmlBodyEquals(String expectedXml, ResponseEntity<String> actualResponse) {
+    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+
+    String actualXml = actualResponse.getBody();
+    assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
   }
 }
