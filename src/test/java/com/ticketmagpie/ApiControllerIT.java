@@ -109,11 +109,8 @@ public class ApiControllerIT {
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>\n" //
         + "</concert>\n";
 
-    ResponseEntity<String> idResponse = postApi("/api/concerts.xml", sendXml);
-    assertEquals(HttpStatus.CREATED, idResponse.getStatusCode());
-
-    String actualXml = idResponse.getBody();
-    System.out.println(actualXml);
+    ResponseEntity<String> postResponse = postApi("/api/concerts.xml", sendXml);
+    assertEquals(HttpStatus.CREATED, postResponse.getStatusCode());
 
     String expectedXml = "" //
         + "<concert>" //
@@ -123,8 +120,8 @@ public class ApiControllerIT {
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>\n" //
         + "</concert>";
 
-    ResponseEntity<String> response = getApi("/api/concerts/2.xml");
-    assertThat(response.getBody(), CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
+    String actualXml = postResponse.getBody();
+    assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
   }
 
   private ResponseEntity<String> postApi(String path, String sendXml) {

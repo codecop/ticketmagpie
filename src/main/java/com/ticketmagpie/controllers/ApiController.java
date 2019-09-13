@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ticketmagpie.Concert;
 import com.ticketmagpie.infrastructure.persistence.ConcertRepository;
+import com.ticketmagpie.infrastructure.persistence.LastIdInserted;
 import com.ticketmagpie.infrastructure.xml.ConcertResource;
 import com.ticketmagpie.infrastructure.xml.ConcertsResource;
 
@@ -29,6 +30,8 @@ public class ApiController {
 
   @Autowired
   private ConcertRepository concertRepository;
+  @Autowired
+  private LastIdInserted lastIdInserted;
 
   @RequestMapping(value = "/concerts.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
   // @RequestMapping(value = "/concerts.json", method = GET, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -59,14 +62,21 @@ public class ApiController {
   }
 
   private ConcertResource toResource(Concert concert) {
-    return new ConcertResource(concert.getId(), concert.getBand(), concert.getDate(), concert.getDescription());
+    return toResource(concert, concert.getId());
+  }
+
+  private ConcertResource toResource(Concert concert, Integer id) {
+    return new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription());
   }
 
   @RequestMapping(value = "/concerts.xml", method = POST, produces = { MediaType.APPLICATION_XML_VALUE })
-  public ResponseEntity<?> addConcert(@RequestBody ConcertResource resource) throws URISyntaxException {
+  public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource resource) throws URISyntaxException {
     Concert concert = new Concert(null, resource.getBand(), resource.getDate(), resource.getDescription(), null, new byte[0]);
+
     concertRepository.save(concert);
-    return ResponseEntity.created(new URI("/api/concerts/2.xml")).build();
+    int newId = lastIdInserted.get();
+
+    return ResponseEntity.created(new URI("/api/concerts/" + newId + ".xml")).body(toResource(concert, newId));
   }
 
 }
