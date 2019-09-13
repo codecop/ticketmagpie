@@ -27,15 +27,19 @@ public class ApiController {
   // @RequestMapping(value = "/concerts.json", method = GET, produces = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ConcertsResource exportConcerts() {
-    List<ConcertResource> concerts = concertRepository.getAllConcerts(). //
-        stream(). //
-        map(this::concertToEntity). //
-        collect(Collectors.toList());
-
-    return new ConcertsResource(concerts);
+    List<Concert> concerts = concertRepository.getAllConcerts();
+    return toResource(concerts);
   }
 
-  private ConcertResource concertToEntity(Concert concert) {
+  private ConcertsResource toResource(List<Concert> concerts) {
+    List<ConcertResource> resources = concerts. //
+        stream(). //
+        map(this::toResource). //
+        collect(Collectors.toList());
+    return new ConcertsResource(resources);
+  }
+
+  private ConcertResource toResource(Concert concert) {
     return new ConcertResource(concert.getId(), concert.getBand(), concert.getDate(), concert.getDescription());
   }
 

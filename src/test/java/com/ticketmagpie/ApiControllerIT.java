@@ -2,7 +2,6 @@ package com.ticketmagpie;
 
 import static org.junit.Assert.assertThat;
 
-import java.net.URL;
 import java.util.Arrays;
 
 import org.junit.Before;
@@ -31,12 +30,12 @@ public class ApiControllerIT {
   @Value("${local.server.port}")
   private int port;
 
-  private URL base;
+  private String apiBaseUrl;
   private RestTemplate template;
 
   @Before
-  public void setUp() throws Exception {
-    this.base = new URL("http://localhost:" + port + "/api/concerts.xml");
+  public void prepareTemplate() {
+    apiBaseUrl = "http://127.0.0.1:" + port;
     template = new TestRestTemplate();
   }
 
@@ -44,15 +43,33 @@ public class ApiControllerIT {
   public void listAllConcerts() {
     // see https://stackoverflow.com/a/21637522/104143
 
+    String controlXml = "" //
+        + "<concerts>" //
+        + "  <concert>" //
+        + "    <id>0</id>" //
+        + "    <band>Lake Malawi</band>" //
+        + "    <date>July 15th</date>" //
+        + "    <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description></concert>" //
+        + "  <concert>" //
+        + "    <id>1</id>" //
+        + "    <band>The Players</band>" //
+        + "    <date>May 22nd</date>" //
+        + "    <description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description>" //
+        + "  </concert>" //
+        + "</concerts>";
+
+    String responseXml = requestApi("/api/concerts.xml");
+
+    assertThat(responseXml, CompareMatcher.isIdenticalTo(controlXml).ignoreWhitespace().ignoreComments());
+  }
+
+  private String requestApi(String path) {
     // Set XML content type explicitly to force response in XML (If not spring gets response in JSON)
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
     HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-    ResponseEntity<String> response = template.exchange(base.toString(), HttpMethod.GET, entity, String.class);
-    String responseBody = response.getBody();
-
-    String controlXml = "<concerts><concert><id>0</id><band>Lake Malawi</band><date>July 15th</date><description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description></concert><concert><id>1</id><band>The Players</band><date>May 22nd</date><description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description></concert></concerts>";
-    assertThat(responseBody, CompareMatcher.isIdenticalTo(controlXml));
+    ResponseEntity<String> response = template.exchange(apiBaseUrl + path, HttpMethod.GET, entity, String.class);
+    return response.getBody();
   }
 }
