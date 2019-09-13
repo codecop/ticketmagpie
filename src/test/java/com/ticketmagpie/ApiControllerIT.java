@@ -100,14 +100,11 @@ public class ApiControllerIT {
   @Test
   public void newConcert() {
     String sendXml = "" //
-        + "<!DOCTYPE concert [\n" // 
-        + "<!ENTITY ouml \"oe\">\n" // 
-        + "]>" //
-        + "<concert>\n" //
-        + "  <band>Phoenix</band>\n" //
-        + "  <date>December 18th</date>\n" //
-        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>\n" //
-        + "</concert>\n";
+        + "<concert>" //
+        + "  <band>Phoenix</band>" //
+        + "  <date>December 18th</date>" //
+        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
+        + "</concert>";
 
     ResponseEntity<String> postResponse = postApi("/api/concerts.xml", sendXml);
     assertEquals(HttpStatus.CREATED, postResponse.getStatusCode());
@@ -115,15 +112,47 @@ public class ApiControllerIT {
     String expectedXml = "" //
         + "<concert>" //
         + "  <id>2</id>" //
-        + "  <band>Phoenix</band>\n" //
-        + "  <date>December 18th</date>\n" //
-        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>\n" //
+        + "  <band>Phoenix</band>" //
+        + "  <date>December 18th</date>" //
+        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
         + "</concert>";
 
     String actualXml = postResponse.getBody();
     assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
   }
 
+  @Test
+  public void zNewConcertWithXmlEntities() {
+    String sendXml = "" //
+        + "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>" // 
+        + "<!DOCTYPE concert [\n" //
+//        + "<!ELEMENT band (#PCDATA)>\n" //
+//        + "<!ELEMENT date (#PCDATA)>\n" //
+//        + "<!ELEMENT description (#PCDATA)>\n" //
+        + "<!ENTITY ouml \"oe\" >\n" // 
+        + "<!ENTITY sad_smiley \"&#x2639;\" >\n" //
+        + "]>" //
+        + "<concert>\n" //
+        + "  <band>Phoenix</band>\n" //
+        + "  <date>December 18th</date>\n" //
+        + "  <description>&sad_smiley; Ph&ouml;enix is an indie pop band from Versailles, France.</description>\n" //
+        + "</concert>\n";
+
+    ResponseEntity<String> postResponse = postApi("/api/concerts.xml", sendXml);
+    assertEquals(HttpStatus.CREATED, postResponse.getStatusCode());
+
+    String expectedXml = "" //
+        + "<concert>" //
+        + "  <id>3</id>" //
+        + "  <band>Phoenix</band>" //
+        + "  <date>December 18th</date>" //
+        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
+        + "</concert>";
+
+    String actualXml = postResponse.getBody();
+    assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
+  }
+  
   private ResponseEntity<String> postApi(String path, String sendXml) {
     return template.exchange(apiBaseUrl + path, HttpMethod.POST, sendAndAcceptXml(sendXml), String.class);
   }
