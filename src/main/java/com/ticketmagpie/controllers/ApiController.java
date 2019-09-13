@@ -1,7 +1,10 @@
 package com.ticketmagpie.controllers;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -58,6 +62,11 @@ public class ApiController {
     return new ConcertResource(concert.getId(), concert.getBand(), concert.getDate(), concert.getDescription());
   }
 
-  // TODO post concert, - how to do security?
+  @RequestMapping(value = "/concerts.xml", method = POST, produces = { MediaType.APPLICATION_XML_VALUE })
+  public ResponseEntity<?> addConcert(@RequestBody ConcertResource resource) throws URISyntaxException {
+    Concert concert = new Concert(null, resource.getBand(), resource.getDate(), resource.getDescription(), null, new byte[0]);
+    concertRepository.save(concert);
+    return ResponseEntity.created(new URI("/api/concerts/2.xml")).build();
+  }
 
 }

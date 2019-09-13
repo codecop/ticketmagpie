@@ -42,7 +42,7 @@ public class ApiControllerIT {
   }
 
   @Test
-  public void listAllConcerts() {
+  public void alistOfAllConcerts() {
     String expectedXml = "" //
         + "<concerts>" //
         + "  <concert>" //
@@ -58,13 +58,13 @@ public class ApiControllerIT {
         + "    <description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description>" //
         + "  </concert>" //
         + "</concerts>";
-    ResponseEntity<String> response = requestApi("/api/concerts.xml");
+    ResponseEntity<String> response = getApi("/api/concerts.xml");
     assertXmlBodyEquals(expectedXml, response);
   }
 
   @Test
-  public void getConcert() {
-    ResponseEntity<String> noResponse = requestApi("/api/concerts/3.xml");
+  public void aSingleConcert() {
+    ResponseEntity<String> noResponse = getApi("/api/concerts/99.xml");
     assertEquals(HttpStatus.NOT_FOUND, noResponse.getStatusCode());
 
     String expectedXml = "" //
@@ -74,19 +74,20 @@ public class ApiControllerIT {
         + "  <date>July 15th</date>" //
         + "  <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
         + "</concert>";
-    ResponseEntity<String> response = requestApi("/api/concerts/0.xml");
+    ResponseEntity<String> response = getApi("/api/concerts/0.xml");
     assertXmlBodyEquals(expectedXml, response);
   }
 
-  private ResponseEntity<String> requestApi(String path) {
+  private ResponseEntity<String> getApi(String path) {
     // see https://stackoverflow.com/a/21637522/104143
+    return template.exchange(apiBaseUrl + path, HttpMethod.GET, acceptXml(), String.class);
+  }
 
+  private HttpEntity<String> acceptXml() {
     // Set XML content type explicitly to force response in XML (If not spring gets response in JSON)
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-    HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
-    return template.exchange(apiBaseUrl + path, HttpMethod.GET, entity, String.class);
+    return new HttpEntity<>(headers);
   }
 
   private void assertXmlBodyEquals(String expectedXml, ResponseEntity<String> actualResponse) {
@@ -95,4 +96,46 @@ public class ApiControllerIT {
     String actualXml = actualResponse.getBody();
     assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
   }
+
+  @Test
+  public void newConcert() {
+    String sendXml = "" //
+        + "<!DOCTYPE concert [\n" // 
+        + "<!ENTITY ouml \"oe\">\n" // 
+        + "]>" //
+        + "<concert>\n" //
+        + "  <band>Phoenix</band>\n" //
+        + "  <date>December 18th</date>\n" //
+        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>\n" //
+        + "</concert>\n";
+
+    ResponseEntity<String> idResponse = postApi("/api/concerts.xml", sendXml);
+    assertEquals(HttpStatus.CREATED, idResponse.getStatusCode());
+
+    String actualXml = idResponse.getBody();
+    System.out.println(actualXml);
+
+    String expectedXml = "" //
+        + "<concert>" //
+        + "  <id>2</id>" //
+        + "  <band>Phoenix</band>\n" //
+        + "  <date>December 18th</date>\n" //
+        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>\n" //
+        + "</concert>";
+
+    ResponseEntity<String> response = getApi("/api/concerts/2.xml");
+    assertThat(response.getBody(), CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
+  }
+
+  private ResponseEntity<String> postApi(String path, String sendXml) {
+    return template.exchange(apiBaseUrl + path, HttpMethod.POST, sendAndAcceptXml(sendXml), String.class);
+  }
+
+  private HttpEntity<String> sendAndAcceptXml(String sendXml) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
+    headers.setContentType(MediaType.APPLICATION_XML);
+    return new HttpEntity<>(sendXml, headers);
+  }
+
 }
