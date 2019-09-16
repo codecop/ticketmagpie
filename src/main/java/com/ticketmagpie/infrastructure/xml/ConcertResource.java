@@ -2,8 +2,14 @@ package com.ticketmagpie.infrastructure.xml;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @XmlRootElement(name = "concert")
+@XmlType(propOrder = { "id", "band", "date", "description" })
+@ApiModel(value = "concert")
 public class ConcertResource {
 
   private Integer id;
@@ -21,12 +27,14 @@ public class ConcertResource {
     this.description = description;
   }
 
-  @XmlElement(name = "id")
+  @XmlElement
+  @ApiModelProperty(position = 0)
   public Integer getId() {
     return id;
   }
 
-  @XmlElement(name = "band")
+  @XmlElement
+  @ApiModelProperty(position = 1)
   public String getBand() {
     return band;
   }
@@ -35,22 +43,24 @@ public class ConcertResource {
     this.band = band;
   }
 
-  @XmlElement(name = "description")
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  @XmlElement(name = "date")
+  @XmlElement
+  @ApiModelProperty(position = 2)
   public String getDate() {
     return date;
   }
 
   public void setDate(String date) {
     this.date = date;
+  }
+
+  @XmlElement
+  @ApiModelProperty(position = 3)
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   @Override

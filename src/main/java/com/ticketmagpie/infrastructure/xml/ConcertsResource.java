@@ -2,32 +2,34 @@ package com.ticketmagpie.infrastructure.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.swagger.annotations.ApiModel;
+
 @XmlRootElement(name = "concerts")
+@ApiModel(value = "concerts")
 public class ConcertsResource {
 
-  private List<ConcertResource> concerts;
+  // wrong name, so XML and Swagger are happy
+  private List<ConcertResource> concert;
 
   public ConcertsResource() {
   }
 
   public ConcertsResource(List<ConcertResource> concerts) {
-    this.concerts = concerts;
+    this.concert = concerts;
   }
 
-  @XmlElement(name = "concert")
-  public List<ConcertResource> getConcerts() {
-    return concerts;
+  public List<ConcertResource> getConcert() {
+    return concert;
   }
 
-  public void setConcerts(List<ConcertResource> concerts) {
-    this.concerts = concerts;
+  public void setConcert(List<ConcertResource> concerts) {
+    this.concert = concerts;
   }
 
   @Override
   public String toString() {
-    return "ConcertsResource{" + "concerts=" + concerts + '}';
+    return "ConcertsResource{" + "concerts=" + concert + '}';
   }
 }

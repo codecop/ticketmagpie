@@ -24,6 +24,8 @@ import com.ticketmagpie.infrastructure.persistence.LastIdInserted;
 import com.ticketmagpie.infrastructure.xml.ConcertResource;
 import com.ticketmagpie.infrastructure.xml.ConcertsResource;
 
+import io.swagger.annotations.ApiOperation;
+
 @Controller
 @RequestMapping("/api")
 public class ApiController {
@@ -35,12 +37,14 @@ public class ApiController {
 
   @RequestMapping(value = "/concerts.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
   @ResponseBody
+  @ApiOperation(value = "Returns all concerts.", response = ConcertsResource.class)
   public ConcertsResource exportConcerts() {
     List<Concert> concerts = concertRepository.getAllConcerts();
     return toResource(concerts);
   }
 
   @RequestMapping(value = "/concerts/{concertId}.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
+  @ApiOperation(value = "Returns a single concert.", response = ConcertResource.class)
   public ResponseEntity<?> exportConcert(@PathVariable("concertId") Integer concertId) {
     try {
 
@@ -68,9 +72,12 @@ public class ApiController {
     return new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription());
   }
 
-  @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_XML_VALUE })
+  @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE }, produces = {
+      MediaType.APPLICATION_XML_VALUE })
+  @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
-    Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), null, new byte[0]);
+    Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), null,
+        new byte[0]);
 
     concertRepository.save(concert);
     int newId = lastIdInserted.get();

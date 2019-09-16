@@ -16,7 +16,7 @@ class XmlAssert {
 
   public void equals(String expectedXml, String actualXml) {
     assertThat(actualXml, CompareMatcher.isSimilarTo(expectedXml). //
-        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). //
+        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). // ignore order of child elements
         ignoreWhitespace(). //
         ignoreComments());
   }
