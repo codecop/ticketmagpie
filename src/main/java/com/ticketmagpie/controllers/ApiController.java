@@ -34,7 +34,6 @@ public class ApiController {
   private LastIdInserted lastIdInserted;
 
   @RequestMapping(value = "/concerts.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
-  // @RequestMapping(value = "/concerts.json", method = GET, produces = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ConcertsResource exportConcerts() {
     List<Concert> concerts = concertRepository.getAllConcerts();
@@ -69,7 +68,7 @@ public class ApiController {
     return new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription());
   }
 
-  @RequestMapping(value = "/concerts.xml", method = POST, produces = { MediaType.APPLICATION_XML_VALUE })
+  @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_XML_VALUE })
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
     Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), null, new byte[0]);
 
