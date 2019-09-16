@@ -1,6 +1,5 @@
 package com.ticketmagpie;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
@@ -14,7 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +23,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
+import com.ticketmagpie.pages.ForgetPasswordPage;
+import com.ticketmagpie.pages.LoginPage;
+import com.ticketmagpie.pages.WelcomePage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -70,22 +71,12 @@ public class UserEmailIT {
 
   @Test
   public void shouldSendForgotPasswordEmail() {
-    driver.get(this.base);
-
-    driver.findElement(By.partialLinkText("Log in")).click();
-    // should see login page
-    assertThat(driver.getPageSource(), containsString("Please enter your user name and password"));
-
-    driver.findElement(By.partialLinkText("Forgot your password?")).click();
-    assertThat(driver.getPageSource(), containsString("Enter your username to recover your password"));
-
-    driver.findElement(By.xpath("//input[@name='user']")).sendKeys("danbilling");
-    driver.findElement(By.xpath("//input[@type='submit']")).click();
-
-    assertThat(driver.getPageSource(), containsString("We have sent you a password recovery email."));
+    WelcomePage welcome = WelcomePage.open(driver, base);
+    LoginPage login = welcome.clickLogin();
+    ForgetPasswordPage forgotPassword = login.clickForgot();
+    forgotPassword.submit("danbilling");
 
     // see https://github.com/kirviq/dumbster
-
     List<SmtpMessage> emails = dumbster.getReceivedEmails();
     assertThat(emails, hasSize(1));
     SmtpMessage email = emails.get(0);

@@ -1,17 +1,10 @@
 package com.ticketmagpie;
 
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +12,11 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import com.ticketmagpie.pages.LoginPage;
+import com.ticketmagpie.pages.RegisterPage;
+import com.ticketmagpie.pages.UserPage;
+import com.ticketmagpie.pages.WelcomePage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -54,42 +52,11 @@ public class UserFlowIT {
 
   @Test
   public void shouldRegisterAndLogInAndLogout() {
-    driver.get(this.base);
-
-    String welcome = driver.findElement(By.tagName("h2")).getText();
-    assertEquals("All the shiny tickets are here!", welcome);
-
-    driver.findElement(By.partialLinkText("Register")).click();
-    // should see register page
-    assertThat(driver.getPageSource(), containsString("Please enter the user name and password you would like"));
-
-    driver.findElement(By.xpath("//input[@name='username']")).sendKeys("junit");
-    driver.findElement(By.xpath("//input[@name='password']")).sendKeys("password");
-    driver.findElement(By.xpath("//input[@type='submit']")).click();
-
-    // should see login page
-    assertThat(driver.getPageSource(), containsString("Please enter your user name and password"));
-    assertThat(driver.getPageSource(), not(containsString("junit")));
-
-    driver.findElement(By.xpath("//input[@name='username']")).sendKeys("junit");
-    driver.findElement(By.xpath("//input[@name='password']")).sendKeys("password");
-    driver.findElement(By.xpath("//input[@type='submit']")).click();
-
-    // should be logged in
-    assertNotNull(driver.findElement(By.partialLinkText("junit"))); // exists
-
-    welcome = driver.findElement(By.tagName("h2")).getText();
-    assertEquals("All the shiny tickets are here!", welcome);
-
-    // my stuff  
-    driver.findElement(By.partialLinkText("junit")).click();
-    // should see my user logged in
-    assertThat(driver.getPageSource(), containsString("Hello <span>" + "junit"));
-    
-    driver.findElement(By.xpath("//input[@value='Sign Out']")).click();
-    
-    // should see login page
-    assertThat(driver.getPageSource(), containsString("Please enter your user name and password"));
-    assertThat(driver.getPageSource(), not(containsString("junit")));
+    WelcomePage welcome = WelcomePage.open(driver, base);
+    RegisterPage register = welcome.clickRegister();
+    LoginPage login = register.register("junit", "password");
+    welcome = login.login("junit", "password");
+    UserPage user = welcome.clickUser("junit");
+    user.clickLogout();
   }
 }
