@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 import java.util.Arrays;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +36,7 @@ public class ApiControllerIT {
 
   private String apiBaseUrl;
   private RestTemplate template;
+  private static int lastId = 1;
 
   @Before
   public void prepareTemplate() {
@@ -88,7 +88,7 @@ public class ApiControllerIT {
         + "  <date>July 15th</date>" //
         + "  <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
         + "</concert>";
-    
+
     ResponseEntity<String> response = getApi("/api/concerts/0.xml");
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -121,7 +121,7 @@ public class ApiControllerIT {
 
     String expectedXml = "" //
         + "<concert>" //
-        + "  <id>2</id>" //
+        + "  <id>" + (++lastId) + "</id>" //
         + "  <band>Phoenix</band>" //
         + "  <date>December 18th</date>" //
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
@@ -130,19 +130,18 @@ public class ApiControllerIT {
     assertXmlBodyEquals(expectedXml, postResponse);
   }
 
-  @Ignore
   @Test
   public void zNewConcertWithXmlEntities() {
     String sendXml = "" //
         + "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>" // 
         + "<!DOCTYPE concert [\n" //
-        + "<!ENTITY ouml \"oe\" >\n" // 
-        + "<!ENTITY sad_smiley \"&#x2639;\" >\n" //
+        + "<!ENTITY ouml \"oe\" >\n" // plain entity 
+        + "<!ENTITY uuml \"&#252;\" >\n" // numeric entity
         + "]>" //
         + "<concert>\n" //
-        + "  <band>Phoenix</band>\n" //
-        + "  <date>December 18th</date>\n" //
-        + "  <description>&sad_smiley; Ph&ouml;enix is an indie pop band from Versailles, France.</description>\n" //
+        + "  <band>Phoeenixß</band>\n" // ISO-8859-1 character
+        + "  <date>Dec&uuml;mber 18th</date>\n" //
+        + "  <description>Ph&ouml;enix is an indie pop band from Versailles, France.</description>\n" //
         + "</concert>\n";
 
     ResponseEntity<String> postResponse = postApi("/api/concerts.xml", sendXml);
@@ -150,15 +149,16 @@ public class ApiControllerIT {
 
     String expectedXml = "" //
         + "<concert>" //
-        + "  <id>3</id>" //
-        + "  <band>Phoenix</band>" //
-        + "  <date>December 18th</date>" //
-        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
+        + "  <id>" + (++lastId) + "</id>" //
+        + "  <band>Phoeenixß</band>" //
+        + "  <date>Decümber 18th</date>" //
+        + "  <description>Phoeenix is an indie pop band from Versailles, France.</description>" //
         + "</concert>";
 
+    System.out.println(postResponse.getBody());
     assertXmlBodyEquals(expectedXml, postResponse);
   }
-  
+
   private ResponseEntity<String> postApi(String path, String sendXml) {
     return template.exchange(apiBaseUrl + path, HttpMethod.POST, sendAndAcceptXml(sendXml), String.class);
   }
