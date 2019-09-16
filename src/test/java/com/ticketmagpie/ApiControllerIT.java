@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Arrays;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,8 +61,19 @@ public class ApiControllerIT {
         + "    <description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description>" //
         + "  </concert>" //
         + "</concerts>";
+
     ResponseEntity<String> response = getApi("/api/concerts.xml");
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
     assertXmlBodyEquals(expectedXml, response);
+  }
+
+  private void assertXmlBodyEquals(String expectedXml, ResponseEntity<String> response) {
+    String actualXml = response.getBody();
+    assertThat(actualXml, CompareMatcher.isSimilarTo(expectedXml). //
+        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). //
+        ignoreWhitespace(). //
+        ignoreComments());
   }
 
   @Test
@@ -76,7 +88,10 @@ public class ApiControllerIT {
         + "  <date>July 15th</date>" //
         + "  <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
         + "</concert>";
+    
     ResponseEntity<String> response = getApi("/api/concerts/0.xml");
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
     assertXmlBodyEquals(expectedXml, response);
   }
 
@@ -90,16 +105,6 @@ public class ApiControllerIT {
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
     return new HttpEntity<>(headers);
-  }
-
-  private void assertXmlBodyEquals(String expectedXml, ResponseEntity<String> actualResponse) {
-    assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
-
-    String actualXml = actualResponse.getBody();
-    assertThat(actualXml, CompareMatcher.isSimilarTo(expectedXml). //
-        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). //
-        ignoreWhitespace(). //
-        ignoreComments());
   }
 
   @Test
@@ -122,21 +127,15 @@ public class ApiControllerIT {
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
         + "</concert>";
 
-    String actualXml = postResponse.getBody();
-    assertThat(actualXml, CompareMatcher.isSimilarTo(expectedXml). //
-        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). //
-        ignoreWhitespace(). //
-        ignoreComments());
+    assertXmlBodyEquals(expectedXml, postResponse);
   }
 
+  @Ignore
   @Test
   public void zNewConcertWithXmlEntities() {
     String sendXml = "" //
         + "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>" // 
         + "<!DOCTYPE concert [\n" //
-//        + "<!ELEMENT band (#PCDATA)>\n" //
-//        + "<!ELEMENT date (#PCDATA)>\n" //
-//        + "<!ELEMENT description (#PCDATA)>\n" //
         + "<!ENTITY ouml \"oe\" >\n" // 
         + "<!ENTITY sad_smiley \"&#x2639;\" >\n" //
         + "]>" //
@@ -157,8 +156,7 @@ public class ApiControllerIT {
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
         + "</concert>";
 
-    String actualXml = postResponse.getBody();
-    assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
+    assertXmlBodyEquals(expectedXml, postResponse);
   }
   
   private ResponseEntity<String> postApi(String path, String sendXml) {

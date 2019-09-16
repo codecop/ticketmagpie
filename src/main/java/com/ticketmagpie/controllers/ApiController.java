@@ -70,13 +70,14 @@ public class ApiController {
   }
 
   @RequestMapping(value = "/concerts.xml", method = POST, produces = { MediaType.APPLICATION_XML_VALUE })
-  public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource resource) throws URISyntaxException {
-    Concert concert = new Concert(null, resource.getBand(), resource.getDate(), resource.getDescription(), null, new byte[0]);
+  public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
+    Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), null, new byte[0]);
 
     concertRepository.save(concert);
     int newId = lastIdInserted.get();
 
-    return ResponseEntity.created(new URI("/api/concerts/" + newId + ".xml")).body(toResource(concert, newId));
+    ConcertResource responseResource = toResource(concert, newId);
+    return ResponseEntity.created(new URI("/api/concerts/" + newId + ".xml")).body(responseResource);
   }
 
 }
