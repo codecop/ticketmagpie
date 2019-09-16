@@ -1,5 +1,6 @@
 package com.ticketmagpie;
 
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -52,7 +53,7 @@ public class UserFlowIT {
   }
 
   @Test
-  public void shouldRegisterAndLogIn() {
+  public void shouldRegisterAndLogInAndLogout() {
     driver.get(this.base);
 
     String welcome = driver.findElement(By.tagName("h2")).getText();
@@ -68,6 +69,7 @@ public class UserFlowIT {
 
     // should see login page
     assertThat(driver.getPageSource(), containsString("Please enter your user name and password"));
+    assertThat(driver.getPageSource(), not(containsString("junit")));
 
     driver.findElement(By.xpath("//input[@name='username']")).sendKeys("junit");
     driver.findElement(By.xpath("//input[@name='password']")).sendKeys("password");
@@ -81,7 +83,13 @@ public class UserFlowIT {
 
     // my stuff  
     driver.findElement(By.partialLinkText("junit")).click();
-    // should see my 
+    // should see my user logged in
     assertThat(driver.getPageSource(), containsString("Hello <span>" + "junit"));
+    
+    driver.findElement(By.xpath("//input[@value='Sign Out']")).click();
+    
+    // should see login page
+    assertThat(driver.getPageSource(), containsString("Please enter your user name and password"));
+    assertThat(driver.getPageSource(), not(containsString("junit")));
   }
 }
