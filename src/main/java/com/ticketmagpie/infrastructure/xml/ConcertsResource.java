@@ -2,23 +2,28 @@ package com.ticketmagpie.infrastructure.xml;
 
 import java.util.List;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@JacksonXmlRootElement(localName = "concerts")
+@XmlRootElement(name = "concerts")
 public class ConcertsResource {
 
   private List<ConcertResource> concerts;
+
+  public ConcertsResource() {
+  }
 
   public ConcertsResource(List<ConcertResource> concerts) {
     this.concerts = concerts;
   }
 
-  @JacksonXmlProperty(localName = "concert")
-  @JacksonXmlElementWrapper(useWrapping = false)
+  @XmlElement(name = "concert")
   public List<ConcertResource> getConcerts() {
     return concerts;
+  }
+
+  public void setConcerts(List<ConcertResource> concerts) {
+    this.concerts = concerts;
   }
 
   @Override

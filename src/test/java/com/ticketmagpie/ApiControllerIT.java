@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
+import org.xmlunit.diff.DefaultNodeMatcher;
+import org.xmlunit.diff.ElementSelectors;
 import org.xmlunit.matchers.CompareMatcher;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -94,7 +96,10 @@ public class ApiControllerIT {
     assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
 
     String actualXml = actualResponse.getBody();
-    assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
+    assertThat(actualXml, CompareMatcher.isSimilarTo(expectedXml). //
+        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). //
+        ignoreWhitespace(). //
+        ignoreComments());
   }
 
   @Test
@@ -118,7 +123,10 @@ public class ApiControllerIT {
         + "</concert>";
 
     String actualXml = postResponse.getBody();
-    assertThat(actualXml, CompareMatcher.isIdenticalTo(expectedXml).ignoreWhitespace().ignoreComments());
+    assertThat(actualXml, CompareMatcher.isSimilarTo(expectedXml). //
+        withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)). //
+        ignoreWhitespace(). //
+        ignoreComments());
   }
 
   @Test

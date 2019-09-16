@@ -1,8 +1,9 @@
 package com.ticketmagpie.infrastructure.xml;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@JacksonXmlRootElement(localName = "concert")
+@XmlRootElement(name = "concert")
 public class ConcertResource {
 
   private Integer id;
@@ -20,10 +21,12 @@ public class ConcertResource {
     this.description = description;
   }
 
+  @XmlElement(name = "id")
   public Integer getId() {
     return id;
   }
 
+  @XmlElement(name = "band")
   public String getBand() {
     return band;
   }
@@ -32,6 +35,7 @@ public class ConcertResource {
     this.band = band;
   }
 
+  @XmlElement(name = "description")
   public String getDescription() {
     return description;
   }
@@ -40,6 +44,7 @@ public class ConcertResource {
     this.description = description;
   }
 
+  @XmlElement(name = "date")
   public String getDate() {
     return date;
   }
