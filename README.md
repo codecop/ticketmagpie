@@ -8,12 +8,12 @@ Configuration
 
 This project requires [Maven 3](https://maven.apache.org/) and
 [Java Development Kit version 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html/).
-The project does not work with Java 9. 
+The project does not work with Java 9.
 
 1. Extract, configure and install Maven on your machine, in an appropriate location: https://maven.apache.org/install.html.
 2. Extract and install Java Development Kit on your machine, in an appropriate location e.g. `c:\Program Files (x86)\Java\` on Windows, `/System/Library/Java/` on Mac OSX, `/usr/java/` on Linux.
-3. Configure the `JAVA_HOME` environment variable and path on your machine. Instructions here: [WINDOWS](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html), 
-[MAC](https://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/), 
+3. Configure the `JAVA_HOME` environment variable and path on your machine. Instructions here: [WINDOWS](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html),
+[MAC](https://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/),
 [LINUX](http://www.cyberciti.biz/faq/linux-unix-set-java_home-path-variable/).
 4. You may need to also configure the Path variable: https://www.java.com/en/download/help/path.xml
 5. Download the TicketMagpie-master project to your local machine and install to an appropriate location e.g `C:\Users\[username]\ticketmagpie` (on Windows).
@@ -45,8 +45,15 @@ Database configuration
 ----------------------
 
 By default, the application expects a MySQL database to be available on localhost, default port 3306.
-The application will use the user `root` to connect to a database called `ticketmagpie`. To run the latest
-MySQL docker image with that configuration:
+The application will use the user `root` to connect to a database called `ticketmagpie`.
+
+If you have MySQL or [MariaDB](https://mariadb.org/) installed, initially create the database with:
+
+´´´
+mysql -u root < src\main\resources\create-mysql-database.sql
+´´´´
+
+If you have Docker installed, run the latest MySQL docker image with suitable configuration:
 
 ```
 docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
@@ -70,12 +77,12 @@ mvn spring-boot:run -Dspring.profiles.active=hsqldb
 Email configuration
 -------------------
 
-To send password recovery email you need to configure an SMTP server with credentials. 
+To send password recovery email you need to configure an SMTP server with credentials.
 
 You can pass the email configuration as follows:
 
 ```
-mvn spring-boot:run -Dmail.smtp.host=SMTP_SERVER \ 
+mvn spring-boot:run -Dmail.smtp.host=SMTP_SERVER \
                     -Dmail.smtp.port=587 \
                     -Dmail.smtp.username=USER@DOMAIN.COM \
                     -Dmail.smtp.password=PASSWORD
