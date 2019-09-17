@@ -22,11 +22,22 @@ public class LoginPage extends Page {
   }
 
   public WelcomePage login(String username, String password) {
+    performLogin(username, password);
+
+    return new WelcomePage(driver);
+  }
+
+  private void performLogin(String username, String password) {
     driver.findElement(By.xpath("//input[@name='username']")).sendKeys(username);
     driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
     driver.findElement(By.xpath("//input[@type='submit']")).click();
+  }
 
-    return new WelcomePage(driver);
+  public void wrongLogin(String username, String password) {
+    performLogin(username, password);
+
+    assertThat(driver.getPageSource(), containsString("Unable to log in"));
+    assertThat(driver.getPageSource(), not(containsString("junit")));
   }
 
 }

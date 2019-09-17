@@ -40,6 +40,7 @@ public class UserFlowIT {
     WelcomePage welcome = browser.open(baseUrl);
     RegisterPage register = welcome.clickRegister();
     LoginPage login = register.register("junit", "password");
+    login.wrongLogin("junit", "wrong");
     welcome = login.login("junit", "password");
     UserPage user = welcome.clickUser("junit");
     user.clickLogout();
