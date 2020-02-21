@@ -1,13 +1,8 @@
 package com.ticketmagpie.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ticketmagpie.Concert;
 import com.ticketmagpie.Ticket;
 import com.ticketmagpie.User;
+import com.ticketmagpie.infrastructure.ImageService;
 import com.ticketmagpie.infrastructure.persistence.CommentRepository;
 import com.ticketmagpie.infrastructure.persistence.ConcertRepository;
 import com.ticketmagpie.infrastructure.persistence.TicketRepository;
@@ -45,6 +41,9 @@ public class MainController {
 
   @Autowired
   private ForgotPasswordService forgotPasswordService;
+
+  @Autowired
+  private ImageService imageService;
 
   @RequestMapping("/")
   public String index(Model model) {
@@ -129,7 +128,7 @@ public class MainController {
     }
     
     String resourceName = getResourceNameForConcertImage(imageUrl);
-    try (InputStream inputStream = open(resourceName);
+    try (InputStream inputStream = imageService.open(resourceName);
         ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
       IOUtils.copy(inputStream, outputStream);
     }      
@@ -139,45 +138,4 @@ public class MainController {
     return "static/images/" + imageUrl;
   }
   
-  private InputStream open(String resourceName) throws FileNotFoundException, URISyntaxException {
-    InputStream resourceStream = openInClasspath(resourceName);
-    if (resourceStream != null) {
-      return resourceStream;
-    }
-    
-    InputStream fileStream = openInFileSystem(resourceName);
-    if (fileStream != null) {
-      return fileStream;
-    }
-    
-    return open1x1BlankGif();
-  }
-
-  private InputStream openInClasspath(String resourceName) {
-    return getClass().getClassLoader().getResourceAsStream(resourceName);
-  }
-
-  private FileInputStream openInFileSystem(String resourceName) throws URISyntaxException, FileNotFoundException {
-    URL applicationProperties = getClass().getClassLoader().getResource("application.properties");
-    if (!"file".equalsIgnoreCase(applicationProperties.getProtocol())) {
-      return null;
-    }
-
-    File resources = new File(applicationProperties.toURI()).getParentFile();
-    File resource = new File(resources, resourceName);
-    if (resource.exists()) {
-      return new FileInputStream(resource);
-    }
-
-    return null;
-  }
-
-  private InputStream open1x1BlankGif() {
-    return new ByteArrayInputStream(new byte[] { //
-        0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x1, 0, 0x1, 0, (byte) 0x80, 0, 0, (byte) 0xff, (byte) 0xff, (byte) 0xff, //
-        0, 0, 0, 0x21, (byte) 0xf9, 0x4, 0, 0, 0, 0, 0, 0x2c, 0, 0, 0, 0, //
-        0x1, 0, 0x1, 0, 0, 0x2, 0x2, 0x44, 0x1, 0, 0x3b //
-    });
-  }
-
 }
