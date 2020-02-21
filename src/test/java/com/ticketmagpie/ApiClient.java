@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Communicate with the API.
  */
-class ApiClient {
+public class ApiClient {
 
   private final String baseUrl;
   private final RestTemplate template;
