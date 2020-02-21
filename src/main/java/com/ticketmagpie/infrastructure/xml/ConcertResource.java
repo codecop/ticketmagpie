@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @XmlRootElement(name = "concert")
-@XmlType(propOrder = { "id", "band", "date", "description" })
+@XmlType(propOrder = { "id", "band", "date", "description", "image" })
 @ApiModel(value = "concert")
 public class ConcertResource {
 
@@ -16,15 +16,17 @@ public class ConcertResource {
   private String band;
   private String date;
   private String description;
+  private String image;
 
   public ConcertResource() {
   }
 
-  public ConcertResource(Integer id, String band, String date, String description) {
+  public ConcertResource(Integer id, String band, String date, String description, String image) {
     this.id = id;
     this.band = band;
     this.date = date;
     this.description = description;
+    this.image = image;
   }
 
   @XmlElement
@@ -63,8 +65,19 @@ public class ConcertResource {
     this.description = description;
   }
 
+  @XmlElement
+  @ApiModelProperty(position = 4)
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+  
   @Override
   public String toString() {
-    return "ConcertResource{" + "id='" + id + '\'' + ", band='" + band + '\'' + ", description='" + description + '\'' + '}';
+    return "ConcertResource{" + "id='" + id + '\'' + ", band='" + band + '\'' + ", description='" + description + ", image='" + image + '\''
+        + '}';
   }
 }

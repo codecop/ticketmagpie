@@ -45,12 +45,14 @@ public class ApiControllerIT {
         + "    <band>Lake Malawi</band>" //
         + "    <date>July 15th</date>" //
         + "    <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
+        + "    <image>Lake_Malawi_music_band.jpg</image>" //
         + "  </concert>" //
         + "  <concert>" //
         + "    <id>1</id>" //
         + "    <band>The Players</band>" //
         + "    <date>May 22nd</date>" //
         + "    <description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description>" //
+        + "    <image>jazz-band.jpg</image>" //
         + "  </concert>" //
         + "</concerts>";
     xmlAssert.bodyEquals(expectedXml, response);
@@ -73,6 +75,7 @@ public class ApiControllerIT {
         + "  <band>Lake Malawi</band>" //
         + "  <date>July 15th</date>" //
         + "  <description>Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.</description>" //
+        + "  <image>Lake_Malawi_music_band.jpg</image>" //
         + "</concert>";
     xmlAssert.bodyEquals(expectedXml, response);
   }
@@ -84,6 +87,7 @@ public class ApiControllerIT {
         + "  <band>Phoenix</band>" //
         + "  <date>December 18th</date>" //
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
+        + "  <image>image</image>" //
         + "</concert>";
 
     ResponseEntity<String> response = apiClient.post("/api/concerts.xml", sendXml);
@@ -95,6 +99,7 @@ public class ApiControllerIT {
         + "  <band>Phoenix</band>" //
         + "  <date>December 18th</date>" //
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
+        + "  <image>image</image>" //
         + "</concert>";
     xmlAssert.bodyEquals(expectedXml, response);
   }
