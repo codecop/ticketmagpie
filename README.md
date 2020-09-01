@@ -24,7 +24,7 @@ Running the project
 
 Once you have configured and installed Maven and Java Development Kit and TicketMagpie, you can start the application by running this command from the root folder of the project:
 
-```
+```bash
 mvn spring-boot:run
 ```
 
@@ -35,8 +35,8 @@ Running the project in Docker
 
 The application is published on the docker hub. You can run it like this, with the in-memory database:
 
-```
-docker run -e "SPRING_PROFILES_ACTIVE=hsqldb" -p8080:8080 "dhatanian/ticketmagpie"
+```bash
+docker run -e "SPRING_PROFILES_ACTIVE=hsqldb" -p8080:8080 "codecop/ticketmagpie"
 ```
 
 The application will then be available at [localhost](http://localhost:8080).
@@ -49,20 +49,20 @@ The application will use the user `root` to connect to a database called `ticket
 
 If you have MySQL or [MariaDB](https://mariadb.org/) installed, initially create the database with:
 
-´´´
-mysql -u root < src\main\resources\create-mysql-database.sql
+´´´bash
+mysql -u root < src/main/resources/create-mysql-database.sql
 ´´´´
 
 If you have Docker installed, run the latest MySQL docker image with suitable configuration:
 
-```
+```bash
 docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
               -e MYSQL_DATABASE=ticketmagpie -p 3306:3306 "mysql:latest"
 ```
 
 You can pass custom database configuration as follows:
 
-```
+```bash
 mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://MYSQL_SERVER:PORT/DB_NAME \
                     -Dspring.datasource.username=USER \
                     -Dspring.datasource.password=PASSWORD
@@ -70,7 +70,7 @@ mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://MYSQL_SERVER:PORT/DB_NA
 
 If you do not have a database server, you can run the application with an HSQLDB in-memory database:
 
-```
+```bash
 mvn spring-boot:run -Dspring.profiles.active=hsqldb
 ```
 
@@ -81,7 +81,7 @@ To send password recovery email you need to configure an SMTP server with creden
 
 You can pass the email configuration as follows:
 
-```
+```bash
 mvn spring-boot:run -Dmail.smtp.host=SMTP_SERVER \
                     -Dmail.smtp.port=587 \
                     -Dmail.smtp.username=USER@DOMAIN.COM \
