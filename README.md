@@ -49,9 +49,9 @@ The application will use the user `root` to connect to a database called `ticket
 
 If you have MySQL or [MariaDB](https://mariadb.org/) installed, initially create the database with:
 
-´´´bash
+```bash
 mysql -u root < src/main/resources/create-mysql-database.sql
-´´´´
+```
 
 If you have Docker installed, run the latest MySQL docker image with suitable configuration:
 
