@@ -21,26 +21,27 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
         run: mvn -B package
-      - run: mkdir staging && cp target/*.jar staging
-      - uses: actions/upload-artifact@v2
+      - name: Upload JAR file
+        uses: actions/upload-artifact@v2
         with:
           name: Package
-          path: staging
+          path: target/ticketmagpie.jar
 
   # see https://www.prestonlamb.com/blog/creating-a-docker-image-with-github-actions
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
+      - name: Download JAR file
+        uses: actions/download-artifact@v2
         with:
           name: Package
-      - name: Display structure of downloaded files
-        run: ls -R
+          path: target
       - name: Login to DockerHub Registry
-        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: Build the latest Docker image
         run: docker build . --file Dockerfile --tag codecop/ticketmagpie:latest
       - name: Push the latest Docker image to Docker Hub
