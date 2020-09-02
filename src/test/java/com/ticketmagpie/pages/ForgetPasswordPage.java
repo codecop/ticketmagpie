@@ -1,6 +1,5 @@
 package com.ticketmagpie.pages;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
 import org.openqa.selenium.By;
@@ -11,7 +10,7 @@ public class ForgetPasswordPage extends Page {
   public ForgetPasswordPage(WebDriver driver) {
     super(driver);
 
-    assertThat(driver.getPageSource(), containsString("Enter your username to recover your password"));
+    assertWaitingThat(WebDriver::getPageSource, containsString("Enter your username to recover your password"));
   }
 
   public MailSentPage submit(String username) {

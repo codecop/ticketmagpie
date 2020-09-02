@@ -1,6 +1,5 @@
 package com.ticketmagpie.pages;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
@@ -12,8 +11,8 @@ public class LoginPage extends Page {
   public LoginPage(WebDriver driver) {
     super(driver);
 
-    assertThat(driver.getPageSource(), containsString("Please enter your user name and password"));
-    assertThat(driver.getPageSource(), not(containsString("junit")));
+    assertWaitingThat(WebDriver::getPageSource, containsString("Please enter your user name and password"));
+    assertWaitingThat(WebDriver::getPageSource, not(containsString("junit")));
   }
 
   public ForgetPasswordPage clickForgot() {
@@ -36,8 +35,8 @@ public class LoginPage extends Page {
   public void wrongLogin(String username, String password) {
     performLogin(username, password);
 
-    assertThat(driver.getPageSource(), containsString("Unable to log in"));
-    assertThat(driver.getPageSource(), not(containsString("junit")));
+    assertWaitingThat(WebDriver::getPageSource, containsString("Unable to log in"));
+    assertWaitingThat(WebDriver::getPageSource, not(containsString("junit")));
   }
 
 }

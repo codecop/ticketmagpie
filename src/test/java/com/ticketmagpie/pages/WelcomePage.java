@@ -1,6 +1,6 @@
 package com.ticketmagpie.pages;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,8 +16,8 @@ public class WelcomePage extends Page {
   public WelcomePage(WebDriver driver) {
     super(driver);
 
-    String welcome = driver.findElement(By.tagName("h2")).getText();
-    assertEquals("All the shiny tickets are here!", welcome);
+    assertWaitingThat(d -> d.findElement(By.tagName("h2")).getText(),
+            equalTo("All the shiny tickets are here!"));
   }
 
 }
