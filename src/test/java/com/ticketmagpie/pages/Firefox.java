@@ -1,8 +1,10 @@
 package com.ticketmagpie.pages;
 
+import com.ticketmagpie.TestEnvironment;
 import org.junit.rules.ExternalResource;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class Firefox extends ExternalResource {
 
@@ -14,7 +16,11 @@ public class Firefox extends ExternalResource {
   protected void before() {
     boolean isWindows = System.getProperty("os.name").startsWith("Windows");
     System.setProperty(GECKO_DRIVER_FILE, "./src/test/resources/geckodriver" + ((isWindows) ? ".exe" : ""));
-    driver = new FirefoxDriver();
+    FirefoxOptions options = new FirefoxOptions();
+    if (TestEnvironment.inEnvironment()) {
+      options.setHeadless(true);
+    }
+    driver = new FirefoxDriver(options);
   }
 
   @Override
