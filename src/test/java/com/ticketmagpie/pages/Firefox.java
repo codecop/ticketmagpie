@@ -12,7 +12,8 @@ public class Firefox extends ExternalResource {
 
   @Override
   protected void before() {
-    System.setProperty(GECKO_DRIVER_FILE, "./src/test/resources/geckodriver-0.25.0-win32.exe");
+    boolean isWindows = System.getProperty("os.name").startsWith("Windows");
+    System.setProperty(GECKO_DRIVER_FILE, "./src/test/resources/geckodriver" + ((isWindows) ? ".exe" : ""));
     driver = new FirefoxDriver();
   }
 
