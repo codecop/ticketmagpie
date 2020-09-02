@@ -1,0 +1,2 @@
+-Dmagpie.server=127.0.0.1
+-Dmagpie.port=8080
