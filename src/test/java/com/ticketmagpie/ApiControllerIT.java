@@ -28,7 +28,7 @@ public class ApiControllerIT {
 
   @Before
   public void prepareClient() {
-    apiClient = new ApiClient("http://127.0.0.1:" + port);
+    apiClient = new ApiClient(TestEnvironment.host("127.0.0.1", port));
     xmlAssert = new XmlAssert();
   }
 

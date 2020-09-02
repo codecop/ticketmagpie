@@ -41,7 +41,7 @@ public class UserEmailIT {
 
   @Before
   public void setBaseUrl() {
-    baseUrl = "http://127.0.0.1:" + httpPort + '/';
+    baseUrl = TestEnvironment.baseUrl("127.0.0.1", httpPort);
   }
 
   @Value("${mail.smtp.port}")

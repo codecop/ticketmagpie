@@ -32,7 +32,7 @@ public class UserFlowIT {
 
   @Before
   public void setBaseUrl() {
-    baseUrl = "http://127.0.0.1:" + httpPort + '/';
+    baseUrl = TestEnvironment.baseUrl("127.0.0.1", httpPort);
   }
 
   @Test

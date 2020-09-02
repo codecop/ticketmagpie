@@ -31,7 +31,7 @@ public class MainControllerIT {
 
   @Before
   public void setUp() throws Exception {
-    this.base = new URL("http://localhost:" + port + '/');
+    this.base = new URL(TestEnvironment.baseUrl("localhost", port));
     template = new TestRestTemplate();
   }
 
