@@ -12,7 +12,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,25 +22,19 @@ public class MailService {
   private final String username;
 
   @Autowired
-  public MailService(@Value("${mail.smtp.auth}") boolean smtpAuth,
-                     @Value("${mail.smtp.starttls.enable}") boolean tlsEnabled,
-                     @Value("${mail.smtp.host}") String smtpHost,
-                     @Value("${mail.smtp.port}") int smtpPort,
-                     @Value("${mail.smtp.username}") String username,
-                     @Value("${mail.smtp.password}") String password) {
-
-    sessionProperties.put("mail.smtp.auth", Boolean.toString(smtpAuth));
-    sessionProperties.put("mail.smtp.starttls.enable", Boolean.toString(tlsEnabled));
-    sessionProperties.put("mail.smtp.host", smtpHost);
-    sessionProperties.put("mail.smtp.port", Integer.toString(smtpPort));
+  public MailService(MailConfiguration smtp) {
+    sessionProperties.put("mail.smtp.auth", Boolean.toString(smtp.isAuth()));
+    sessionProperties.put("mail.smtp.starttls.enable", Boolean.toString(smtp.isTls()));
+    sessionProperties.put("mail.smtp.host", smtp.getHost());
+    sessionProperties.put("mail.smtp.port", Integer.toString(smtp.getPort()));
 
     authenticator = new Authenticator() {
       @Override
       protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(username, password);
+        return new PasswordAuthentication(username, smtp.getPassword());
       }
     };
-    this.username = username;
+    this.username = smtp.getUsername();
   }
 
   public void sendEmail(String to, String subject, String body) {
