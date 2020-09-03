@@ -33,7 +33,7 @@ The application will then be available at [localhost](http://localhost:8080).
 Running the project in Docker
 -----------------------------
 
-The application is published on the docker hub. You can run it like this, with the in-memory database:
+The application is published on the [docker hub](https://hub.docker.com/r/codecop/ticketmagpie). You can run it like this, with the in-memory database:
 
 ```bash
 docker run -e "SPRING_PROFILES_ACTIVE=hsqldb" -p8080:8080 "codecop/ticketmagpie"
