@@ -40,8 +40,8 @@ public class Concert {
   }
 
   public boolean getHasImage() {
-    return getImageUrl() != null || 
-        (getImageBlob() != null && getImageBlob().length > 0);
+    return imageUrl != null ||
+        (imageBlob != null && imageBlob.length > 0);
   }
   
   @Override

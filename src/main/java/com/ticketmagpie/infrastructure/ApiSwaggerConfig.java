@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -30,8 +31,10 @@ public class ApiSwaggerConfig {
     return new ApiInfo("TicketMagpie REST API", // 
         "List and create concerts.", // 
         "0.2", //
-        "", // 
-        "Daniel Billing and David Hatanian", // 
+        "", //
+        new Contact("Daniel Billing and David Hatanian", //
+                "https://thetestdoctor.co.uk/2016/10/11/introducing-ticket-magpie/", //
+                "ticketmagpie.danbilling@yopmail.com"), //
         "CC-BY 3.0", //
         "http://html5up.net/license");
   }

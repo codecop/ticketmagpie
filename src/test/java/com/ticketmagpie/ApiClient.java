@@ -1,6 +1,6 @@
 package com.ticketmagpie;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -38,7 +38,7 @@ public class ApiClient {
   private HttpHeaders acceptXmlHeader() {
     // Set XML content type explicitly to force response in XML (If not spring sends response in JSON)
     HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_XML));
     return headers;
   }
 

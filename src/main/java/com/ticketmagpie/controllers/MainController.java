@@ -89,7 +89,7 @@ public class MainController {
   }
 
   @RequestMapping("/concertimage")
-  public void concertImage(@RequestParam(required = true) Integer id, HttpServletResponse httpServletResponse)
+  public void concertImage(@RequestParam Integer id, HttpServletResponse httpServletResponse)
       throws IOException, URISyntaxException {
     Concert concert = concertRepository.get(id);
     if (concert.getImageUrl() != null && !concert.getImageUrl().isEmpty()) {

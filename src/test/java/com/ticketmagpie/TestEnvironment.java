@@ -18,17 +18,15 @@ public class TestEnvironment {
   private static String host(String defaultHost) {
     if (inEnvironment()) {
       return System.getProperty(HOST_PROPERTY_NAME);
-    } else {
-      return defaultHost;
     }
+    return defaultHost;
   }
 
   private static int port(int defaultPort) {
     if (inEnvironment()) {
       return Integer.getInteger(PORT_PROPERTY_NAME);
-    } else {
-      return defaultPort;
     }
+    return defaultPort;
   }
 
   public static String server(String defaultHost, int defaultPort) {
