@@ -1,4 +1,4 @@
-name: Java Docker Continuous Integration Workflow
+name: CI Workflow Java Maven Docker
 
 on: [push]
 
