@@ -100,7 +100,3 @@ jobs:
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: Push the latest Docker image to Docker Hub
         run: docker push codecop/ticketmagpie:latest
-      - name: Tag the Docker image for scanning
-        run: docker tag codecop/ticketmagpie:latest codecop/scan:ticketmagpie-latest
-      - name: Push the scan Docker image to Docker Hub
-        run: docker push codecop/scan:ticketmagpie-latest
