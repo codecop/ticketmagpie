@@ -3,6 +3,7 @@ package com.ticketmagpie;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -129,6 +130,34 @@ public class ApiControllerIT {
         + "  <description>Phoeenix is an indie pop band from Versailles, France.</description>" //
         + "</concert>";
     xmlAssert.bodyEquals(expectedXml, response);
+  }
+
+  @Test
+  @Ignore("Stops test execution")
+  public void newConcertWithBillionLaughs() {
+    String sendXml = "" //
+        + "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" //
+        + "<!DOCTYPE concert [\n" //
+        + "<!ENTITY lol \"lol\">\n" //
+        + "<!ELEMENT lolz (#PCDATA)>\n" //
+        + "<!ENTITY lol1 \"&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;\">\n" //
+        + "<!ENTITY lol2 \"&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;\">\n" //
+        + "<!ENTITY lol3 \"&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;\">\n" //
+        + "<!ENTITY lol4 \"&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;\">\n" //
+        + "<!ENTITY lol5 \"&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;\">\n" //
+        + "<!ENTITY lol6 \"&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;\">\n" //
+        + "<!ENTITY lol7 \"&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;\">\n" //
+        + "<!ENTITY lol8 \"&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;\">\n" //
+        + "<!ENTITY lol9 \"&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;\">\n" //
+        + "]>\n" //
+        + "<concert>\n" //
+        + "<band>dos</band>\n" //
+        + "<date>December 18th</date>\n" //
+        + "<description>s &lol9; end</description>\n" //
+        + "</concert>\n";
+
+    ResponseEntity<String> response = apiClient.post("/api/concerts.xml", sendXml);
+    assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
   }
 
 }

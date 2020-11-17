@@ -78,6 +78,12 @@
             <artifactId>jaxb-core</artifactId>
             <version>2.3.0</version>
         </dependency>        
+        <dependency>
+            <!-- try different XML parser for billion laughs -->
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.12.0</version>
+        </dependency>
          <!-- API documentation -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -213,6 +219,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+                    <argLine>-Djdk.xml.entityExpansionLimit=0</argLine>
                     <runOrder>random</runOrder>
                 </configuration>
                 <executions>
