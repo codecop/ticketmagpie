@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: ticketmagpie-head">
+</head>
+<body class="no-sidebar">
+<div id="page-wrapper">
+
+    <div th:replace="fragments :: ticketmagpie-header">
+    </div>
+
+    <!-- Features 1 -->
+    <div class="wrapper">
+        <div class="container">
+            <div class="row">
+                <header>
+                    <h2><span th:text="${status}"></span> - <span th:text="${error}"></span></h2>
+                    <i th:text="${message}"></i>
+                </header>
+            </div>
+            <div class="row">
+                <pre th:text="${trace}"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: ticketmagpie-footer">
+    </div>
+
+</div>
+
+<!-- Scripts -->
+
+<span th:replace="fragments :: ticketmagpie-scripts"></span>
+
+</body>
+</html>

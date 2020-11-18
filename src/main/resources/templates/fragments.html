@@ -44,21 +44,21 @@
                     <li>
                         <a href="/user/home">
                             <span class="icon fa-user"></span> &nbsp;
-                            <span th:text="${#authentication.name != 'anonymousUser'} ? ${#authentication.name} : 'Log in'"></span>
+                            <span th:text="${#authentication != null &amp;&amp; #authentication.name != 'anonymousUser'} ? ${#authentication.name} : 'Log in'"></span>
                         </a>
                     </li>
-                    <li th:if="${#authentication.name == 'anonymousUser'}">
+                    <li th:if="${#authentication != null &amp;&amp; #authentication.name == 'anonymousUser'}">
                         <a href="/registration">
                             <span class="icon fa-user-plus"></span> &nbsp;
                             Register
                         </a>
                     </li>
-                    <li th:if="${#authentication.name != 'anonymousUser'}">
+                    <li th:if="${#authentication != null &amp;&amp; #authentication.name != 'anonymousUser'}">
                         <a sec:authorize="hasAuthority('ADMIN')" href="/user/admin">
                             Admin
                         </a>
                     </li>
-                    <li th:if="${#authentication.name != 'anonymousUser'}">
+                    <li th:if="${#authentication != null &amp;&amp; #authentication.name != 'anonymousUser'}">
                         <form action="/logout"
                               method="post" style="display:inline;">
                             <input type="submit" value="Sign Out"
