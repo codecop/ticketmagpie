@@ -15,24 +15,23 @@
                 <h2><span th:text="${status}"></span> - <span th:text="${error}"></span></h2>
                 <i th:text="${message}"></i>
             </header>
-            <h3>Trace</h3>
-            <pre th:text="${trace}">No Trace</pre>
             
-            <h3>Session Attributes</h3> <!-- IWebContext -->
+            <h3>Trace</h3>
+            <pre th:text="${trace}">No Trace</pre><p> </p>
+            
+            <h3>Session Attributes</h3> 
             <p>
                 <span th:each="name : ${#ctx.getSessionAttributes().keySet()}">
                     <b th:text="${name}"></b>: <code th:text="${#ctx.getSessionAttributes().get(name)}"></code><br />
                 </span>
             </p>
             
-            <!--
-            <h3>Context Attributes</h3>
+            <h3>Application/Context Attributes</h3>
             <p>
                 <span th:each="name : ${#ctx.getApplicationAttributes().keySet()}">
                     <b th:text="${name}"></b>: <code th:text="${#ctx.getApplicationAttributes().get(name)}"></code><br />
                 </span>
             </p>
-            -->
             
             <h3>Java Properties</h3>
             <p>
@@ -41,17 +40,12 @@
                 </span>
             </p>
             
-            <h3>Environment</h3>
+            <h3>Environment Variables</h3>
             <p>
                 <span th:each="name : ${env.keySet()}">
                     <b th:text="${name}"></b>: <code th:text="${env.get(name)}"></code><br />
                 </span>
             </p>
-
-            <!--
-            TODO letzte SQL Statements?
-            TODO letzte Log Statements?
-             -->
         </div>
     </div>
 
