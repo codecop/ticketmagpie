@@ -1,0 +1,41 @@
+name: "Snyk Container Scan"
+
+on: push
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Build a Docker image
+    - name: Checkout the code
+      uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    - name: Build with Maven
+      run: mvn -B clean package
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+
+    # Snyk can be used to break the build when it detects vulnerabilities.
+    # In this case we want to upload the issues to GitHub Code Scanning
+    - name: Run Snyk to check Docker image for vulnerabilities
+      continue-on-error: true
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: localbuild/testimage:latest
+        args: --file=Dockerfile
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: snyk.sarif
