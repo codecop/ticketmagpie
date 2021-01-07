@@ -78,12 +78,19 @@ public class MainController {
 
   @RequestMapping("/forgotpassword")
   public String forgotPassword(@RequestParam(required = false) String user, Model model) {
+    boolean error = false;
     boolean done = false;
     if (user != null) {
       User userFromDatabase = userRepository.get(user);
-      forgotPasswordService.userForgotPassword(userFromDatabase);
-      done = true;
+      if (userFromDatabase != null) {
+        forgotPasswordService.userForgotPassword(userFromDatabase);
+        done = true;
+      } else {
+        model.addAttribute("username", user);
+        error = true;
+      }
     }
+    model.addAttribute("error", error);
     model.addAttribute("done", done);
     return "forgotpassword";
   }
