@@ -1,0 +1,26 @@
+name: Test Java 9+ Maven
+
+on: [push, pull_request]
+
+jobs:
+  matrix_build:
+    strategy:
+      matrix:
+        java-version: [9, 10, 11, 12, 13]
+    name: Test with Java ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Test with Maven
+        run: mvn -Djava.version=${{ matrix.java-version }} -B clean test
