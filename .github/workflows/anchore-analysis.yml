@@ -5,7 +5,7 @@ on: push
 jobs:
   Anchore-Build-Scan:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout the code
       uses: actions/checkout@v2
@@ -23,11 +23,12 @@ jobs:
       run: mvn -B clean package
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-      
-    - name: Run the Anchore scan action 
+
+    - name: Run the Anchore scan action
       uses: anchore/scan-action@main
       with:
         image: "localbuild/testimage:latest"
+        fail-build: false
         # GitHub Advanced Security code scanning integration enabled
         acs-report-enable: true
     - name: Upload Anchore Scan Report
