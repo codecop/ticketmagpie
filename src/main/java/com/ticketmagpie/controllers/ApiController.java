@@ -72,7 +72,7 @@ public class ApiController {
     return new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription(), concert.getImageUrl());
   }
 
-  @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE }, produces = {
+  @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
       MediaType.APPLICATION_XML_VALUE })
   @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
