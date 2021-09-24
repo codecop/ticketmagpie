@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @XmlRootElement(name = "concert")
-@XmlType(propOrder = { "id", "band", "date", "description", "image" })
+@XmlType(propOrder = { "id", "band", "date", "description", "image", "someThing" })
 @ApiModel(value = "concert")
 public class ConcertResource {
 
@@ -16,7 +16,8 @@ public class ConcertResource {
   private String band;
   private String date;
   private String description;
-  private String image;
+  private String image; 
+  private Object someThing; // allow different content
 
   public ConcertResource() {
   }
@@ -73,6 +74,16 @@ public class ConcertResource {
 
   public void setImage(String image) {
     this.image = image;
+  }
+
+  @XmlElement
+  @ApiModelProperty(position = 5)
+  public Object getSomeThing() {
+    return someThing;
+  }
+
+  public void setSomeThing(Object someThing) {
+    this.someThing = someThing;
   }
   
   @Override
