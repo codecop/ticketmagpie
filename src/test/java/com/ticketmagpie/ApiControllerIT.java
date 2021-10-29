@@ -226,9 +226,29 @@ public class ApiControllerIT {
         + "  \"date\": \"December 19th\"," //
         + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
         + "  \"image\": \"image\"," //
-        + "  \"organiser\":{\"type\":\"ConcertResource$RadioStation\",\"frequency\":\"109.8 FM\"}" //
+        + "  \"organiser\":{\"type\":\"com.ticketmagpie.infrastructure.xml.ConcertResource$RadioStation\",\"frequency\":\"109.8 FM\"}" //
         + "}";
 
+    ResponseEntity<String> response = apiClient.postJson("/api/concerts.json", sendJson);
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    lastId++;
+  }
+
+  @Test
+  public void newJsonConcertWithRCE() {
+    String sendJson = "" //
+        + "{" //
+        + "  \"band\": \"Phoenix3\"," //
+        + "  \"date\": \"December 20th\"," //
+        + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
+        + "  \"image\": \"image\"," //
+        + "  \"organiser\":{\"type\":\"com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl\"," //
+//        + "    \"transletBytecodes\" : [ \"AAIAZQ==\" ]," //  
+//        + "    \"transletName\" : \"a.b\"," // 
+        + "    \"_outputProperties\" : { }" // 
+        + "   }" //
+        + "}";
+    
     ResponseEntity<String> response = apiClient.postJson("/api/concerts.json", sendJson);
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
     lastId++;

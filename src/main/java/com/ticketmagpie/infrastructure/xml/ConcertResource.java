@@ -87,10 +87,10 @@ public class ConcertResource {
     @XmlElementRef(type = RadioStation.class), //
     @XmlElementRef(type = ConcertHall.class), })
   @ApiModelProperty(position = 5)
-  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-  @JsonSubTypes({ //
-      @Type(value = RadioStation.class), //
-      @Type(value = ConcertHall.class) })
+  @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+//  @JsonSubTypes({ //
+//      @Type(value = RadioStation.class), //
+//      @Type(value = ConcertHall.class) })
   public Object getOrganiser() {
     return organiser;
   }
