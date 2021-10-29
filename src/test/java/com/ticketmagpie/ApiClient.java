@@ -26,36 +26,43 @@ public class ApiClient {
   public ResponseEntity<String> get(String path) {
     // see https://stackoverflow.com/a/21637522/104143
     String url = baseUrl + path;
-    HttpEntity<String> request = acceptXml();
+    HttpEntity<String> request = acceptFromFile(path);
     return template.exchange(url, HttpMethod.GET, request, String.class);
   }
 
-  private HttpEntity<String> acceptXml() {
-    HttpHeaders headers = acceptXmlHeader();
+  private HttpEntity<String> acceptFromFile(String path) {
+    HttpHeaders headers = acceptHeaderFromFile(path);
     return new HttpEntity<>(headers);
   }
 
-  private HttpHeaders acceptXmlHeader() {
-    // Set XML content type explicitly to force response in XML (If not spring sends response in JSON)
+  private HttpHeaders acceptHeaderFromFile(String path) {
     HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_XML));
+    if (path.toLowerCase().endsWith(".xml")) {
+      // Set XML content type explicitly to force response in XML (If not spring sends response in JSON)
+      headers.setAccept(Collections.singletonList(MediaType.APPLICATION_XML));
+    } else if (path.toLowerCase().endsWith(".json")) {
+      headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    }
     return headers;
   }
 
   public ResponseEntity<String> postXml(String path, String sendXml) {
-    String url = baseUrl + path;
-    HttpEntity<String> request = sendAndAccept(sendXml, MediaType.APPLICATION_XML);
-    return template.exchange(url, HttpMethod.POST, request, String.class);
+    return post(path, MediaType.APPLICATION_XML, sendXml);
   }
 
   public ResponseEntity<String> postJson(String path, String sendJson) {
+    return post(path, MediaType.APPLICATION_JSON, sendJson);
+  }
+
+  private ResponseEntity<String> post(String path, MediaType mediaType, String data) {
     String url = baseUrl + path;
-    HttpEntity<String> request = sendAndAccept(sendJson, MediaType.APPLICATION_JSON);
+    HttpEntity<String> request = sendAndAccept(data, mediaType);
     return template.exchange(url, HttpMethod.POST, request, String.class);
   }
 
   private HttpEntity<String> sendAndAccept(String sendJson, MediaType mediaType) {
-    HttpHeaders headers = acceptXmlHeader();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(mediaType));
     headers.setContentType(mediaType);
     return new HttpEntity<>(sendJson, headers);
   }
