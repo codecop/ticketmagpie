@@ -42,16 +42,22 @@ public class ApiClient {
     return headers;
   }
 
-  public ResponseEntity<String> post(String path, String sendXml) {
+  public ResponseEntity<String> postXml(String path, String sendXml) {
     String url = baseUrl + path;
-    HttpEntity<String> request = sendAndAcceptXml(sendXml);
+    HttpEntity<String> request = sendAndAccept(sendXml, MediaType.APPLICATION_XML);
     return template.exchange(url, HttpMethod.POST, request, String.class);
   }
 
-  private HttpEntity<String> sendAndAcceptXml(String sendXml) {
+  public ResponseEntity<String> postJson(String path, String sendJson) {
+    String url = baseUrl + path;
+    HttpEntity<String> request = sendAndAccept(sendJson, MediaType.APPLICATION_JSON);
+    return template.exchange(url, HttpMethod.POST, request, String.class);
+  }
+
+  private HttpEntity<String> sendAndAccept(String sendJson, MediaType mediaType) {
     HttpHeaders headers = acceptXmlHeader();
-    headers.setContentType(MediaType.APPLICATION_XML);
-    return new HttpEntity<>(sendXml, headers);
+    headers.setContentType(mediaType);
+    return new HttpEntity<>(sendJson, headers);
   }
 
 }

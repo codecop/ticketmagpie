@@ -91,7 +91,7 @@ public class ApiControllerIT {
         + "  <image>image</image>" //
         + "</concert>";
 
-    ResponseEntity<String> response = apiClient.post("/api/concerts.xml", sendXml);
+    ResponseEntity<String> response = apiClient.postXml("/api/concerts.xml", sendXml);
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
     String expectedXml = "" //
@@ -119,7 +119,7 @@ public class ApiControllerIT {
         + "  <description>Ph&ouml;enix is an indie pop band from Versailles, France.</description>\n" //
         + "</concert>\n";
 
-    ResponseEntity<String> response = apiClient.post("/api/concerts.xml", sendXml);
+    ResponseEntity<String> response = apiClient.postXml("/api/concerts.xml", sendXml);
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
     String expectedXml = "" //
@@ -156,8 +156,33 @@ public class ApiControllerIT {
         + "<description>s &lol9; end</description>\n" //
         + "</concert>\n";
 
-    ResponseEntity<String> response = apiClient.post("/api/concerts.xml", sendXml);
+    ResponseEntity<String> response = apiClient.postXml("/api/concerts.xml", sendXml);
     assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
+  }
+
+  @Test
+  public void newConcertJson() {
+    String sendJson = "" //
+        + "{" //
+        + "  \"band\": \"Phoenix\"," //
+        + "  \"date\": \"December 18th\"," //
+        + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
+        + "  \"image\": \"image\"" //
+        + "}";
+
+    // TODO should be targeting concerts.json
+    ResponseEntity<String> response = apiClient.postJson("/api/concerts.xml", sendJson);
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+    String expectedXml = "" //
+        + "<concert>" //
+        + "  <id>" + (++lastId) + "</id>" //
+        + "  <band>Phoenix</band>" //
+        + "  <date>December 18th</date>" //
+        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
+        + "  <image>image</image>" //
+        + "</concert>";
+    xmlAssert.bodyEquals(expectedXml, response);
   }
 
 }

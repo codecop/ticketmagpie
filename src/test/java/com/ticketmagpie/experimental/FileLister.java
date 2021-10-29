@@ -27,7 +27,7 @@ public class FileLister {
         + "</concert>";
 
     System.out.println("POST " + image);
-    ResponseEntity<String> response = apiClient.post("/api/concerts.xml", sendXml);
+    ResponseEntity<String> response = apiClient.postXml("/api/concerts.xml", sendXml);
     if (!response.getStatusCode().equals(HttpStatus.CREATED)) {
       throw new IOException(response.getStatusCode().getReasonPhrase());
     }
