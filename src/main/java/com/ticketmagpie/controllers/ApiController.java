@@ -35,7 +35,8 @@ public class ApiController {
   @Autowired
   private LastIdInserted lastIdInserted;
 
-  @RequestMapping(value = "/concerts.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
+  @RequestMapping(value = { "/concerts.xml", "/concerts.json" }, method = GET, //
+      produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   @ApiOperation(value = "Returns all concerts.", response = ConcertsResource.class)
   public ConcertsResource exportConcerts() {
@@ -43,7 +44,8 @@ public class ApiController {
     return toResource(concerts);
   }
 
-  @RequestMapping(value = "/concerts/{concertId}.xml", method = GET, produces = { MediaType.APPLICATION_XML_VALUE })
+  @RequestMapping(value = { "/concerts/{concertId}.xml", "/concerts/{concertId}.json" }, method = GET, //
+      produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
   @ApiOperation(value = "Returns a single concert.", response = ConcertResource.class)
   public ResponseEntity<?> exportConcert(@PathVariable("concertId") Integer concertId) {
     try {
@@ -71,14 +73,15 @@ public class ApiController {
   private ConcertResource toResource(Concert concert, Integer id) {
     ConcertResource concertResource = new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription(), concert.getImageUrl());
     // add organiser to see it once
-//    ConcertResource.ConcertHall organiser = new ConcertResource.ConcertHall();
-//    organiser.setName("Royal Albert Hall");
-//    concertResource.setOrganiser(organiser);
+    //    ConcertResource.ConcertHall organiser = new ConcertResource.ConcertHall();
+    //    organiser.setName("Royal Albert Hall");
+    //    concertResource.setOrganiser(organiser);
     return concertResource;
   }
 
-  @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
-      MediaType.APPLICATION_XML_VALUE })
+  @RequestMapping(value = { "/concerts.xml", "/concerts.json" }, method = POST, //
+      consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, //
+      produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
   @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
     // Object organiser = requestResource.getOrganiser();

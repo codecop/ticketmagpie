@@ -34,7 +34,7 @@ public class ApiControllerIT {
   }
 
   @Test
-  public void alistOfAllConcerts() {
+  public void anXmlListOfAllConcerts() {
     ResponseEntity<String> response = apiClient.get("/api/concerts.xml");
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -58,8 +58,6 @@ public class ApiControllerIT {
         + "</concerts>";
     xmlAssert.bodyEquals(expectedXml, response);
   }
-  
-  // TODO make a test to see JSON subtypes and how it looks like
 
   @Test
   public void missingConcert() {
@@ -68,7 +66,7 @@ public class ApiControllerIT {
   }
 
   @Test
-  public void aSingleConcert() {
+  public void anXmlSingleConcert() {
     ResponseEntity<String> response = apiClient.get("/api/concerts/0.xml");
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -84,7 +82,7 @@ public class ApiControllerIT {
   }
 
   @Test
-  public void newConcert() {
+  public void newXmlConcert() {
     String sendXml = "" //
         + "<concert>" //
         + "  <band>Phoenix</band>" //
@@ -108,7 +106,7 @@ public class ApiControllerIT {
   }
 
   @Test
-  public void newConcertWithXmlEntities() {
+  public void newXmlConcertWithXmlEntities() {
     String sendXml = "" //
         + "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>" // 
         + "<!DOCTYPE concert [\n" //
@@ -134,9 +132,9 @@ public class ApiControllerIT {
     xmlAssert.bodyEquals(expectedXml, response);
   }
 
-  @Test
-  @Ignore("Stops test execution")
-  public void newConcertWithBillionLaughs() {
+  @Test(timeout = 5000)
+  @Ignore("Slow test execution")
+  public void newXmlConcertWithBillionLaughs() {
     String sendXml = "" //
         + "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" //
         + "<!DOCTYPE concert [\n" //
@@ -162,30 +160,47 @@ public class ApiControllerIT {
     assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
   }
 
-  @Test @Ignore("WIP")
-  public void newConcertJson() {
+  @Test
+  public void aJsonSingleConcert() {
+    ResponseEntity<String> response = apiClient.get("/api/concerts/0.json");
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+
+    String expectedJson = "" //
+        + "{" //
+        + "\"id\":0," //
+        + "\"band\":\"Lake Malawi\"," //
+        + "\"date\":\"July 15th\"," //
+        + "\"description\":\"Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.\"," //
+        + "\"image\":\"Lake_Malawi_music_band.jpg\"" //
+        + "}";
+    assertEquals(expectedJson, response.getBody());
+  }
+
+  @Test
+  public void newJsonConcert() {
     String sendJson = "" //
         + "{" //
         + "  \"band\": \"Phoenix2\"," //
         + "  \"date\": \"December 19th\"," //
         + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
-        + "  \"image\": \"image\"," //
-        + "  \"organiser\": [\"radio\", { \"name\": \"bar\" } ]" //
+        + "  \"image\": \"image\"" //
+        // + "  \"organiser\": [\"radio\", { \"name\": \"bar\" } ]" //
         + "}";
 
-    // TODO should be targeting concerts.json
-    ResponseEntity<String> response = apiClient.postJson("/api/concerts.xml", sendJson);
+    ResponseEntity<String> response = apiClient.postJson("/api/concerts.json", sendJson);
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    
-    String expectedXml = "" //
-        + "<concert>" //
-        + "  <id>" + (++lastId) + "</id>" //
-        + "  <band>Phoenix2</band>" //
-        + "  <date>December 19th</date>" //
-        + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
-        + "  <image>image</image>" //
-        + "</concert>";
-    xmlAssert.bodyEquals(expectedXml, response);
+
+    String expectedJson = "" //
+        + "{" //
+        + "\"id\":" + (++lastId) + "," //
+        + "\"band\":\"Phoenix2\"," //
+        + "\"date\":\"December 19th\"," //
+        + "\"description\":\"Phoenix is an indie pop band from Versailles, France.\"," //
+        + "\"image\":\"image\"" //
+        + "}";
+    assertEquals(expectedJson, response.getBody());
   }
+
+  // TODO make a test to see JSON subtypes and how it looks like
 
 }
