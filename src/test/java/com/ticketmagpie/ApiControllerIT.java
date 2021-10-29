@@ -201,7 +201,6 @@ public class ApiControllerIT {
         + "  \"date\": \"December 19th\"," //
         + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
         + "  \"image\": \"image\"" //
-        // + "  \"organiser\": [\"radio\", { \"name\": \"bar\" } ]" //
         + "}";
 
     ResponseEntity<String> response = apiClient.postJson("/api/concerts.json", sendJson);
@@ -219,6 +218,20 @@ public class ApiControllerIT {
     assertEquals(expectedJson, response.getBody());
   }
 
-  // TODO make a test to see JSON subtypes and how it looks like
+  @Test
+  public void newJsonConcertWithRadioStation() {
+    String sendJson = "" //
+        + "{" //
+        + "  \"band\": \"Phoenix2\"," //
+        + "  \"date\": \"December 19th\"," //
+        + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
+        + "  \"image\": \"image\"," //
+        + "  \"organiser\":{\"type\":\"ConcertResource$RadioStation\",\"frequency\":\"109.8 FM\"}" //
+        + "}";
 
+    ResponseEntity<String> response = apiClient.postJson("/api/concerts.json", sendJson);
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    lastId++;
+  }
+  
 }

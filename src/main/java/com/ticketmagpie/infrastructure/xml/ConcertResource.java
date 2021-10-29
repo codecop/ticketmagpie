@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -81,9 +82,15 @@ public class ConcertResource {
     this.image = image;
   }
 
-  @XmlElementRefs({ @XmlElementRef(type = RadioStation.class), @XmlElementRef(type = ConcertHall.class), })
+  // see https://www.baeldung.com/jackson-inheritance
+  @XmlElementRefs({ //
+    @XmlElementRef(type = RadioStation.class), //
+    @XmlElementRef(type = ConcertHall.class), })
   @ApiModelProperty(position = 5)
-  // @JsonSubTypes({ @Type(value = RadioStation.class), @Type(value = ConcertHall.class) })
+  @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+  @JsonSubTypes({ //
+      @Type(value = RadioStation.class), //
+      @Type(value = ConcertHall.class) })
   public Object getOrganiser() {
     return organiser;
   }
