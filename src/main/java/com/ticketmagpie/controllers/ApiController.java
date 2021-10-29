@@ -69,14 +69,20 @@ public class ApiController {
   }
 
   private ConcertResource toResource(Concert concert, Integer id) {
-    return new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription(), concert.getImageUrl());
+    ConcertResource concertResource = new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription(), concert.getImageUrl());
+    // add organiser to see it once
+//    ConcertResource.ConcertHall organiser = new ConcertResource.ConcertHall();
+//    organiser.setName("Royal Albert Hall");
+//    concertResource.setOrganiser(organiser);
+    return concertResource;
   }
 
   @RequestMapping(value = "/concerts.xml", method = POST, consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
       MediaType.APPLICATION_XML_VALUE })
   @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
-    System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\n"+requestResource.getOrganiser());; // evaluate it?
+    Object organiser = requestResource.getOrganiser();
+    System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\n"+organiser); // evaluate it?
     String image = requestResource.getImage() != null ? requestResource.getImage().toString() : null; // tmp
     Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), image,
         new byte[0]);

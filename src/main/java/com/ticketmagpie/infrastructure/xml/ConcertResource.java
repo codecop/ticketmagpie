@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,7 +22,7 @@ public class ConcertResource {
   private String date;
   private String description;
   private String image; 
-  private Organiser organiser; // allow different content
+  private Object organiser; // allow different content
 
   public ConcertResource() {
   }
@@ -83,11 +86,15 @@ public class ConcertResource {
     @XmlElementRef(type = ConcertHall.class),
   })
   @ApiModelProperty(position = 5)
-  public Organiser getOrganiser() {
+  @JsonSubTypes({
+    @Type(value = RadioStation.class),
+    @Type(value = ConcertHall.class)
+  })
+  public Object getOrganiser() {
     return organiser;
   }
 
-  public void setOrganiser(Organiser organiser) {
+  public void setOrganiser(Object organiser) {
     this.organiser = organiser;
   }
   
@@ -97,17 +104,12 @@ public class ConcertResource {
         + '}';
   }
 
-  static abstract class Organiser {
-    abstract String getName();
-  }
-  
   @XmlRootElement(name = "radio")
   @XmlType(propOrder = { "name" })
   @ApiModel(value = "radio")
-  static class RadioStation extends Organiser {
+  public static class RadioStation {
     String name;
 
-    @Override
     @XmlElement
     @ApiModelProperty(position = 1)
     public String getName() {
@@ -123,10 +125,9 @@ public class ConcertResource {
   @XmlRootElement(name = "hall")
   @XmlType(propOrder = { "name" })
   @ApiModel(value = "hall")
-  static class ConcertHall extends Organiser {
+  public static class ConcertHall {
     String name;
     
-    @Override
     @XmlElement
     @ApiModelProperty(position = 1)
     public String getName() {

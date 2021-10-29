@@ -58,6 +58,8 @@ public class ApiControllerIT {
         + "</concerts>";
     xmlAssert.bodyEquals(expectedXml, response);
   }
+  
+  // TODO make a test to see JSON subtypes and how it looks like
 
   @Test
   public void missingConcert() {
@@ -160,15 +162,15 @@ public class ApiControllerIT {
     assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
   }
 
-  @Test
+  @Test @Ignore("WIP")
   public void newConcertJson() {
     String sendJson = "" //
         + "{" //
         + "  \"band\": \"Phoenix2\"," //
         + "  \"date\": \"December 19th\"," //
         + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
-        + "  \"image\": \"image\"" //
-//        + "  \"someThing\": [\"foo\", { \"image\":\"bar\"}]" //
+        + "  \"image\": \"image\"," //
+        + "  \"organiser\": [\"radio\", { \"name\": \"bar\" } ]" //
         + "}";
 
     // TODO should be targeting concerts.json
