@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @XmlRootElement(name = "concert")
-@XmlType(propOrder = { "id", "band", "date", "description", "image" })
+@XmlType(propOrder = { "id", "band", "date", "description", "image", "organiser" })
 @ApiModel(value = "concert")
 public class ConcertResource {
 
@@ -21,8 +21,8 @@ public class ConcertResource {
   private String band;
   private String date;
   private String description;
-  private String image; 
-  // private Object organiser; // allow different content
+  private String image;
+  private Object organiser; // allow different organisers
 
   public ConcertResource() {
   }
@@ -81,63 +81,65 @@ public class ConcertResource {
     this.image = image;
   }
 
-//  @XmlElementRefs({
-//    @XmlElementRef(type = RadioStation.class),
-//    @XmlElementRef(type = ConcertHall.class),
-//  })
-//  @ApiModelProperty(position = 5)
-//  @JsonSubTypes({
-//    @Type(value = RadioStation.class),
-//    @Type(value = ConcertHall.class)
-//  })
-//  public Object getOrganiser() {
-//    return organiser;
-//  }
-//
-//  public void setOrganiser(Object organiser) {
-//    this.organiser = organiser;
-//  }
-  
+  @XmlElementRefs({ @XmlElementRef(type = RadioStation.class), @XmlElementRef(type = ConcertHall.class), })
+  @ApiModelProperty(position = 5)
+  // @JsonSubTypes({ @Type(value = RadioStation.class), @Type(value = ConcertHall.class) })
+  public Object getOrganiser() {
+    return organiser;
+  }
+
+  public void setOrganiser(Object organiser) {
+    this.organiser = organiser;
+  }
+
   @Override
   public String toString() {
     return "ConcertResource{" + "id='" + id + '\'' + ", band='" + band + '\'' + ", description='" + description + ", image='" + image + '\''
         + '}';
   }
 
-//  @XmlRootElement(name = "radio")
-//  @XmlType(propOrder = { "name" })
-//  @ApiModel(value = "radio")
-//  public static class RadioStation {
-//    String name;
-//
-//    @XmlElement
-//    @ApiModelProperty(position = 1)
-//    public String getName() {
-//      return name;
-//    }
-//
-//    public void setName(String name) {
-//      this.name = name;
-//    }
-//    
-//  }
-//
-//  @XmlRootElement(name = "hall")
-//  @XmlType(propOrder = { "name" })
-//  @ApiModel(value = "hall")
-//  public static class ConcertHall {
-//    String name;
-//    
-//    @XmlElement
-//    @ApiModelProperty(position = 1)
-//    public String getName() {
-//      return name;
-//    }
-//    
-//    public void setName(String name) {
-//      this.name = name;
-//    }
-//    
-//  }
+  @XmlRootElement(name = "radio")
+  // @XmlType(propOrder = { "name" })
+  // @ApiModel(value = "radio")
+  public static class RadioStation {
+    String frequency;
+
+    @XmlElement
+    public String getFrequency() {
+      return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+      this.frequency = frequency;
+    }
+
+    @Override
+    public String toString() {
+      return "RadioStation at " + frequency;
+    }
+    
+  }
+
+  @XmlRootElement(name = "hall")
+  // @XmlType(propOrder = { "name" })
+  // @ApiModel(value = "hall")
+  public static class ConcertHall {
+    String location;
+
+    @XmlElement
+    // @ApiModelProperty(position = 1)
+    public String getLocation() {
+      return location;
+    }
+
+    public void setLocation(String location) {
+      this.location = location;
+    }
+
+    @Override
+    public String toString() {
+      return "ConcertHall at " + location;
+    }
+  }
 
 }
