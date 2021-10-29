@@ -82,15 +82,15 @@ public class ConcertResource {
     this.image = image;
   }
 
-  // see https://www.baeldung.com/jackson-inheritance
   @XmlElementRefs({ //
-    @XmlElementRef(type = RadioStation.class), //
-    @XmlElementRef(type = ConcertHall.class), })
+      @XmlElementRef(type = RadioStation.class), //
+      @XmlElementRef(type = ConcertHall.class), })
   @ApiModelProperty(position = 5)
+  // see https://www.geeksforgeeks.org/spring-boot-customize-the-jackson-objectmapper/ ... does not work
+  // also spring.jackson.default-typing.object-and-non-concrete=true ... does not work
+  // see https://www.baeldung.com/jackson-inheritance
   @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
-//  @JsonSubTypes({ //
-//      @Type(value = RadioStation.class), //
-//      @Type(value = ConcertHall.class) })
+  @JsonSubTypes({ @Type(value = RadioStation.class), @Type(value = ConcertHall.class) })
   public Object getOrganiser() {
     return organiser;
   }
@@ -106,10 +106,9 @@ public class ConcertResource {
   }
 
   @XmlRootElement(name = "radio")
-  // @XmlType(propOrder = { "name" })
-  // @ApiModel(value = "radio")
+  @ApiModel(value = "radio")
   public static class RadioStation {
-    String frequency;
+    private String frequency;
 
     @XmlElement
     public String getFrequency() {
@@ -124,17 +123,15 @@ public class ConcertResource {
     public String toString() {
       return "RadioStation at " + frequency;
     }
-    
+
   }
 
   @XmlRootElement(name = "hall")
-  // @XmlType(propOrder = { "name" })
-  // @ApiModel(value = "hall")
+  @ApiModel(value = "hall")
   public static class ConcertHall {
-    String location;
+    private String location;
 
     @XmlElement
-    // @ApiModelProperty(position = 1)
     public String getLocation() {
       return location;
     }
