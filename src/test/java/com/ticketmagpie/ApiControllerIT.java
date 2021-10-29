@@ -164,21 +164,22 @@ public class ApiControllerIT {
   public void newConcertJson() {
     String sendJson = "" //
         + "{" //
-        + "  \"band\": \"Phoenix\"," //
-        + "  \"date\": \"December 18th\"," //
+        + "  \"band\": \"Phoenix2\"," //
+        + "  \"date\": \"December 19th\"," //
         + "  \"description\": \"Phoenix is an indie pop band from Versailles, France.\"," //
         + "  \"image\": \"image\"" //
+//        + "  \"someThing\": [\"foo\", { \"image\":\"bar\"}]" //
         + "}";
 
     // TODO should be targeting concerts.json
     ResponseEntity<String> response = apiClient.postJson("/api/concerts.xml", sendJson);
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
+    
     String expectedXml = "" //
         + "<concert>" //
         + "  <id>" + (++lastId) + "</id>" //
-        + "  <band>Phoenix</band>" //
-        + "  <date>December 18th</date>" //
+        + "  <band>Phoenix2</band>" //
+        + "  <date>December 19th</date>" //
         + "  <description>Phoenix is an indie pop band from Versailles, France.</description>" //
         + "  <image>image</image>" //
         + "</concert>";

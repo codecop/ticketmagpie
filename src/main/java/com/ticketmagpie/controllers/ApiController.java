@@ -76,7 +76,7 @@ public class ApiController {
       MediaType.APPLICATION_XML_VALUE })
   @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
-    requestResource.getSomeThing(); // evaluate it?
+    System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\n"+requestResource.getOrganiser());; // evaluate it?
     String image = requestResource.getImage() != null ? requestResource.getImage().toString() : null; // tmp
     Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), image,
         new byte[0]);

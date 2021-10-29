@@ -1,6 +1,8 @@
 package com.ticketmagpie.infrastructure.xml;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -8,7 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @XmlRootElement(name = "concert")
-@XmlType(propOrder = { "id", "band", "date", "description", "image", "someThing" })
+@XmlType(propOrder = { "id", "band", "date", "description", "image", "organiser" })
 @ApiModel(value = "concert")
 public class ConcertResource {
 
@@ -17,7 +19,7 @@ public class ConcertResource {
   private String date;
   private String description;
   private String image; 
-  private Object someThing; // allow different content
+  private Organiser organiser; // allow different content
 
   public ConcertResource() {
   }
@@ -76,14 +78,17 @@ public class ConcertResource {
     this.image = image;
   }
 
-  @XmlElement
+  @XmlElementRefs({
+    @XmlElementRef(type = RadioStation.class),
+    @XmlElementRef(type = ConcertHall.class),
+  })
   @ApiModelProperty(position = 5)
-  public Object getSomeThing() {
-    return someThing;
+  public Organiser getOrganiser() {
+    return organiser;
   }
 
-  public void setSomeThing(Object someThing) {
-    this.someThing = someThing;
+  public void setOrganiser(Organiser organiser) {
+    this.organiser = organiser;
   }
   
   @Override
@@ -91,4 +96,47 @@ public class ConcertResource {
     return "ConcertResource{" + "id='" + id + '\'' + ", band='" + band + '\'' + ", description='" + description + ", image='" + image + '\''
         + '}';
   }
+
+  static abstract class Organiser {
+    abstract String getName();
+  }
+  
+  @XmlRootElement(name = "radio")
+  @XmlType(propOrder = { "name" })
+  @ApiModel(value = "radio")
+  static class RadioStation extends Organiser {
+    String name;
+
+    @Override
+    @XmlElement
+    @ApiModelProperty(position = 1)
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+    
+  }
+
+  @XmlRootElement(name = "hall")
+  @XmlType(propOrder = { "name" })
+  @ApiModel(value = "hall")
+  static class ConcertHall extends Organiser {
+    String name;
+    
+    @Override
+    @XmlElement
+    @ApiModelProperty(position = 1)
+    public String getName() {
+      return name;
+    }
+    
+    public void setName(String name) {
+      this.name = name;
+    }
+    
+  }
+
 }
