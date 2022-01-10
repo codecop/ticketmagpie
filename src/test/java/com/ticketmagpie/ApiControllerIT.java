@@ -54,6 +54,9 @@ public class ApiControllerIT {
         + "    <date>May 22nd</date>" //
         + "    <description>Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.</description>" //
         + "    <image>jazz-band.jpg</image>" //
+        + "    <hall>" //
+        + "      <location>City Concert Hall</location>" //
+        + "    </hall>" //
         + "  </concert>" //
         + "</concerts>";
     xmlAssert.bodyEquals(expectedXml, response);
@@ -189,6 +192,23 @@ public class ApiControllerIT {
         + "\"description\":\"Lake Malawi is an indie-pop band formed by Albert Cerny in September 2013, based in UK and the Czech Republic.\"," //
         + "\"image\":\"Lake_Malawi_music_band.jpg\"," //
         + "\"organiser\":null"
+        + "}";
+    assertEquals(expectedJson, response.getBody());
+  }
+
+  @Test
+  public void aJsonSingleConcertWithSubtype() {
+    ResponseEntity<String> response = apiClient.get("/api/concerts/1.json");
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+
+    String expectedJson = "" //
+        + "{" //
+        + "\"id\":1," //
+        + "\"band\":\"The Players\"," //
+        + "\"date\":\"May 22nd\"," //
+        + "\"description\":\"Re-discover The Players on their second tour at the City Concert Hall. Includes extraordinary new compositions and jazz classics.\"," //
+        + "\"image\":\"jazz-band.jpg\"," //
+        + "\"organiser\":{\"type\":\"com.ticketmagpie.infrastructure.xml.ConcertResource$ConcertHall\",\"location\":\"City Concert Hall\"}"
         + "}";
     assertEquals(expectedJson, response.getBody());
   }
