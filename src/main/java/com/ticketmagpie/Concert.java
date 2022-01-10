@@ -7,14 +7,16 @@ public class Concert {
   private String description;
   private String imageUrl;
   private byte[] imageBlob;
+  private String organiser;
 
-  public Concert(Integer id, String band, String date, String description, String imageUrl, byte[] imageBlob) {
+  public Concert(Integer id, String band, String date, String description, String imageUrl, byte[] imageBlob, String organiser) {
     this.id = id;
     this.band = band;
     this.date = date;
     this.description = description;
     this.imageUrl = imageUrl;
     this.imageBlob = imageBlob;
+    this.organiser = organiser;
   }
 
   public String getBand() {
@@ -44,6 +46,10 @@ public class Concert {
         (imageBlob != null && imageBlob.length > 0);
   }
   
+  public String getOrganiser() {
+    return organiser;
+  }
+  
   @Override
   public String toString() {
     return "Concert{" +
@@ -51,6 +57,7 @@ public class Concert {
         ", band='" + band + '\'' +
         ", description='" + description + '\'' +
         ", imageUrl='" + imageUrl + '\'' +
+        ", organiser='" + organiser + '\'' +
         '}';
   }
 }

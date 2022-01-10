@@ -73,7 +73,7 @@ public class AdminController {
       @RequestParam("image") MultipartFile imageAsMultipartFile,
       Model model) throws IOException {
     concertRepository.save(
-        new Concert(null, band, date, description, imageUrl.isEmpty() ? null : imageUrl, imageAsMultipartFile.getBytes()));
+        new Concert(null, band, date, description, imageUrl.isEmpty() ? null : imageUrl, imageAsMultipartFile.getBytes(), null));
     return listConcerts(model);
   }
 }

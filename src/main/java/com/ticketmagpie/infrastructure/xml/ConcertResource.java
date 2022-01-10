@@ -110,6 +110,13 @@ public class ConcertResource {
   public static class RadioStation {
     private String frequency;
 
+    public RadioStation() {
+    }
+
+    public RadioStation(String frequency) {
+      this.frequency = frequency;
+    }
+
     @XmlElement
     public String getFrequency() {
       return frequency;
@@ -130,6 +137,13 @@ public class ConcertResource {
   @ApiModel(value = "hall")
   public static class ConcertHall {
     private String location;
+
+    public ConcertHall() {
+    }
+    
+    public ConcertHall(String location) {
+      this.location = location;
+    }
 
     @XmlElement
     public String getLocation() {

@@ -33,7 +33,8 @@ public class ConcertRepository {
         rs.getString("concert_date"),
         rs.getString("description"),
         rs.getString("image_url"),
-        getBytesFromBlob(rs.getBlob("image_blob")));
+        getBytesFromBlob(rs.getBlob("image_blob")),
+        rs.getString("organiser"));
   }
 
   public void delete(int id) {
@@ -41,20 +42,22 @@ public class ConcertRepository {
   }
 
   public void save(Concert concert) {
-    jdbcTemplate.update("INSERT INTO concerts (band, concert_date, description, image_url, image_blob) VALUES (?,?,?,?,?)",
+    jdbcTemplate.update("INSERT INTO concerts (band, concert_date, description, image_url, image_blob, organiser) VALUES (?,?,?,?,?,?)",
         new Object[] {
             concert.getBand(),
             concert.getDate(),
             concert.getDescription(),
             concert.getImageUrl(),
-            new SqlLobValue(concert.getImageBlob())
+            new SqlLobValue(concert.getImageBlob()),
+            concert.getOrganiser()
         },
         new int[] {
             Types.VARCHAR,
             Types.VARCHAR,
             Types.VARCHAR,
             Types.VARCHAR,
-            Types.BLOB
+            Types.BLOB,
+            Types.VARCHAR
         }
     );
   }

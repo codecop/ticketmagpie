@@ -71,7 +71,23 @@ public class ApiController {
   }
 
   private ConcertResource toResource(Concert concert, Integer id) {
-    return new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription(), concert.getImageUrl());
+    ConcertResource concertResource = new ConcertResource(id, concert.getBand(), concert.getDate(), concert.getDescription(), concert.getImageUrl());
+    concertResource.setOrganiser(toOrganiser(concert.getOrganiser()));
+    return concertResource;
+  }
+
+  private Object toOrganiser(String organiser) {
+    if (organiser == null) {
+      return null;
+    }
+
+    String[] parts = organiser.split(" ", 3);
+    if (parts[0].equalsIgnoreCase("RadioStation")) {
+      return new ConcertResource.RadioStation(parts[2]);
+    } else if (parts[0].equalsIgnoreCase("ConcertHall")) {
+      return new ConcertResource.ConcertHall(parts[2]);
+    }
+    return null;
   }
 
   @RequestMapping(value = { "/concerts.xml", "/concerts.json" }, method = POST, //
@@ -79,8 +95,9 @@ public class ApiController {
       produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
   @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
+    Object organiser = requestResource.getOrganiser();
     Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), requestResource.getImage(),
-        new byte[0]);
+        new byte[0], organiser != null ? organiser.toString() : null);
 
     concertRepository.save(concert);
     int newId = lastIdInserted.get();

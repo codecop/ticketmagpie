@@ -1,12 +1,13 @@
 DROP SCHEMA PUBLIC CASCADE;
 
 CREATE TABLE concerts (
-  id IDENTITY,
+  id           IDENTITY,
   band         VARCHAR(255),
   concert_date VARCHAR(255),
   description  VARCHAR(255),
   image_url    VARCHAR(255),
-  image_blob   BLOB
+  image_blob   BLOB,
+  organiser    VARCHAR(255)
 );
 
 CREATE TABLE users (
@@ -23,7 +24,7 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE tickets (
-  id IDENTITY,
+  id        IDENTITY,
   concertid INT NOT NULL,
   firstname VARCHAR(255),
   lastname  VARCHAR(255),
