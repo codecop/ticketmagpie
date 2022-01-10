@@ -8,6 +8,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,9 @@ import com.ticketmagpie.infrastructure.security.ForgotPasswordService;
 @Controller
 public class MainController {
 
+  @Autowired
+  private Logger logger;
+  
   @Autowired
   private ConcertRepository concertRepository;
 
@@ -65,6 +69,7 @@ public class MainController {
     if (username == null) {
       return "registration";
     }
+    logger.info("registered {}, {}", username, email);
     userRepository.save(new User(username, password, email, role));
     return "login";
   }
@@ -81,6 +86,7 @@ public class MainController {
     boolean error = false;
     boolean done = false;
     if (user != null) {
+      logger.info("forgot password {}", user);
       User userFromDatabase = userRepository.get(user);
       if (userFromDatabase != null) {
         forgotPasswordService.userForgotPassword(userFromDatabase);
