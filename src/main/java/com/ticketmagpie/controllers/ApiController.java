@@ -96,6 +96,21 @@ public class ApiController {
   @ApiOperation(value = "Creates a new concert.", response = ConcertResource.class)
   public ResponseEntity<ConcertResource> addConcert(@RequestBody ConcertResource requestResource) throws URISyntaxException {
     Object organiser = requestResource.getOrganiser();
+    /*
+    System.out.println("------------------------------------------");
+    if (organiser != null) {
+      System.out.println(organiser.getClass() + " " + organiser.toString());
+      com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl i = (TemplatesImpl) organiser;
+      // i.getOutputProperties(); // muss ausgeführt werden
+      try {
+        i.newTransformer();
+      } catch (TransformerConfigurationException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    System.out.println("------------------------------------------");
+    */
     Concert concert = new Concert(null, requestResource.getBand(), requestResource.getDate(), requestResource.getDescription(), requestResource.getImage(),
         new byte[0], organiser != null ? organiser.toString() : null);
 
