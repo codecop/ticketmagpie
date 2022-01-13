@@ -63,7 +63,7 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <!-- in JDK 8, add-module in Java 9, missing in Java 11 -->
-            <!-- 
+            <!--
             <exclusions>
                 <exclusion>
                     <groupId>javax.activation</groupId>
@@ -88,7 +88,7 @@
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
             <version>2.3.0</version>
-        </dependency>        
+        </dependency>
         <dependency>
             <!-- try different XML parser for billion laughs -->
             <groupId>xerces</groupId>
@@ -249,6 +249,30 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>java-9</id>
+            <activation>
+                <!--
+                <jdk>(8,17]</jdk>
+                -->
+                <property>
+                    <name>!java.version</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>--add-exports</arg>
+                                <arg>java.xml/com.sun.org.apache.xalan.internal.xsltc=ALL-UNNAMED</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <!-- mvn verify -DskipTests -P dependency-check -->
             <id>dependency-check</id>
