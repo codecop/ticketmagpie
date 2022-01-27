@@ -93,7 +93,7 @@
             <!-- try different XML parser for billion laughs -->
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <version>2.12.1</version>
+            <version>2.12.2</version>
         </dependency>
          <!-- API documentation -->
         <dependency>
