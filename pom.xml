@@ -17,17 +17,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- use Log4j for fun -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -107,6 +96,56 @@
             <version>2.6.1</version>
         </dependency>
 
+        <!-- app sensor -->
+        <dependency>
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-core</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        <dependency>
+            <!-- needed for server configuration -->
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-configuration-stax</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        <dependency>
+            <!-- needed for client response handler -->
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-local</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-analysis-reference</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        <dependency>
+            <!-- needs attack store -->
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-storage-in-memory</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        <dependency>
+            <!-- needs AccessController -->
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-access-control-reference</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        <!-- 
+        <dependency>
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-reporting-simple-logging</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+         -->
+        <!-- 
+        <dependency>
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-integration-spring-security</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
+        -->
+              
         <!-- runtime -->
         <dependency>
             <groupId>org.hsqldb</groupId>
@@ -204,6 +243,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <appsensor.version>2.3.3</appsensor.version>
     </properties>
 
     <build>
