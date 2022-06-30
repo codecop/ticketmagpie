@@ -6,7 +6,7 @@ jobs:
   matrix_build:
     strategy:
       matrix:
-        java-version: [9, 10, 11, 12, 13, 14, 15, 16, 17]
+        java-version: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
     name: Test with Java ${{ matrix.java-version }}
     runs-on: ubuntu-latest
     steps:
