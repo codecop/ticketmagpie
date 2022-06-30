@@ -41,25 +41,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //Required if we ever want to include the app in an iframe
         .headers().disable()
         .authorizeRequests()
-        .antMatchers("/user/**").authenticated()
-        .anyRequest().permitAll()
+          .antMatchers("/user/**").authenticated()
+          .anyRequest().permitAll()
         .and()
-        .formLogin()
-        .loginPage("/login")
-        .permitAll()
+          .formLogin()
+            .loginPage("/login")
+            .permitAll()
         .and()
-        .logout()
-        .addLogoutHandler((req, res, auth) -> {
-          DetectionPoint detectionPoint = new DetectionPoint(Category.AUTHENTICATION, "ASR-J");
-          String userName = String.valueOf(auth.getPrincipal());
-          User user = new User(userName);
-          ids.addEvent(new Event(user, detectionPoint, getDetectionSystem()));
-          System.out.println("LOGOUT!!!!");
-        })
-        .permitAll()
+          .logout()
+            .addLogoutHandler((req, res, auth) -> {
+              DetectionPoint detectionPoint = new DetectionPoint(Category.AUTHENTICATION, "ASR-J");
+              String userName = String.valueOf(auth.getPrincipal());
+              User user = new User(userName);
+              ids.addEvent(new Event(user, detectionPoint, getDetectionSystem()));
+              System.out.println("LOGOUT!!!!");
+            })
+            .permitAll()
         .and()
-        .rememberMe()
-        .rememberMeServices(ticketMagPieRememberMeService)
+          .rememberMe()
+            .rememberMeServices(ticketMagPieRememberMeService)
     ;
   }
 
