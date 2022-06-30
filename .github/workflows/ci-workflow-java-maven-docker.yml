@@ -1,6 +1,9 @@
 name: CI Workflow Java Maven Docker
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   # see https://docs.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven
