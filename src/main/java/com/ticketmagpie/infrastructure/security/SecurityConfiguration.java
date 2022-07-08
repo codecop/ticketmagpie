@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
           .logout()
             .addLogoutHandler((req, res, auth) -> {
-              DetectionPoint detectionPoint = new DetectionPoint(Category.AUTHENTICATION, "ASR-J");
+              DetectionPoint detectionPoint = new DetectionPoint(Category.INPUT_VALIDATION, "IE1");
               String userName = String.valueOf(auth.getPrincipal());
               User user = new User(userName);
               ids.addEvent(new Event(user, detectionPoint, getDetectionSystem()));
