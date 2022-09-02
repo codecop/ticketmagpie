@@ -21,7 +21,7 @@
             <category>Authentication</category>
             <id>AE3</id>
             <threshold>
-                <count>2</count>
+                <count>3</count>
                 <interval unit="minutes">5</interval>
             </threshold>
             <responses>

@@ -33,7 +33,6 @@ public class TicketMagPieAuthenticationProvider implements AuthenticationProvide
       tracker.failedAttemptsFor(username);
       throw new UsernameNotFoundException("Error when searching for user: " + e.getMessage(), e);
     }
-    tracker.successFor(username);
     return toAuthentication(user);
   }
 

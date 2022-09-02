@@ -27,8 +27,6 @@ public class MagpieResponseHandler implements ResponseHandler {
 
   @Override
   public void handle(Response response) {
-    System.out.println("XXXXXXXXXXXXXZZZZZZZZZZZZZZZZZZZZ " + response.getAction());
-
     if (LOG.equals(response.getAction())) {
       logger.warn("Response executed for user:" + response.getUser().getUsername() + ", Action: Increased Logging");
     
