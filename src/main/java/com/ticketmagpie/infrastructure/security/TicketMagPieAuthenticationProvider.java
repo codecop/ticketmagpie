@@ -20,7 +20,7 @@ public class TicketMagPieAuthenticationProvider implements AuthenticationProvide
   private UserRepository userRepository;
 
   @Autowired
-  private UserLoginAttemptTracker tracker;
+  private MonitoringPointTracker tracker;
   
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -30,7 +30,7 @@ public class TicketMagPieAuthenticationProvider implements AuthenticationProvide
     try {
       user = userRepository.checkUsernameAndPassword(username, password);
     } catch (Exception e) {
-      tracker.failedAttemptsFor(username);
+      tracker.failedLoginFor(username);
       throw new UsernameNotFoundException("Error when searching for user: " + e.getMessage(), e);
     }
     return toAuthentication(user);

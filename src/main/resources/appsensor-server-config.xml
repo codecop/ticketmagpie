@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<appsensor-server-config
-    xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+<appsensor-server-config xsi:noNamespaceSchemaLocation="appsensor_server_config_2.0.xsd">
 
     <client-application-identification-header-name>X-Appsensor-Client-Application-Name</client-application-identification-header-name>
 
@@ -15,6 +14,32 @@
             </roles>
         </client-application>
     </client-applications>
+
+    <rules>
+        <rule guid="foo">
+            <name>HttpHacking</name>
+            <window unit="minutes">5</window>
+            <expressions>
+                <expression>
+                    <clauses>
+                        <clause>
+                            <monitor-points>
+                                <monitor-point guid="foo1">
+                                    <category>Request</category>
+                                    <id>RE2</id> <!-- unsupported HTTP method -->
+                                </monitor-point>
+                            </monitor-points>
+                        </clause>
+                    </clauses>
+                </expression>
+            </expressions>
+            <responses>
+                <response>
+                    <action>log</action>
+                </response>
+            </responses>
+        </rule>
+    </rules>
 
     <detection-points>
         <detection-point>

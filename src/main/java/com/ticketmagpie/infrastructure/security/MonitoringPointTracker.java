@@ -8,10 +8,12 @@ import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.event.EventManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserLoginAttemptTracker {
+public class MonitoringPointTracker {
 
   @Autowired
   private AppSensorClient appSensorClient;
@@ -19,14 +21,28 @@ public class UserLoginAttemptTracker {
   @Autowired
   private EventManager ids;
 
-  public void failedAttemptsFor(String username) {
+  public void failedLoginFor(String username) {
     DetectionPoint detectionPoint = new DetectionPoint(Category.AUTHENTICATION, "AE3"); // high rate of attempts
     User user = new User(username);
+    track(detectionPoint, user);
+  }
+
+  private void track(DetectionPoint detectionPoint, User user) {
     ids.addEvent(new Event(user, detectionPoint, getDetectionSystem()));
   }
 
   private DetectionSystem getDetectionSystem() {
     return new DetectionSystem(appSensorClient.getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderValue());
+  }
+
+  public void badMethod() {
+    DetectionPoint detectionPoint = new DetectionPoint(Category.REQUEST, "RE2");
+
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = new User(username);
+    
+    track(detectionPoint, user);
   }
 
 }

@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ticketmagpie.Concert;
@@ -24,6 +27,7 @@ import com.ticketmagpie.infrastructure.persistence.ConcertRepository;
 import com.ticketmagpie.infrastructure.persistence.TicketRepository;
 import com.ticketmagpie.infrastructure.persistence.UserRepository;
 import com.ticketmagpie.infrastructure.security.ForgotPasswordService;
+import com.ticketmagpie.infrastructure.security.MonitoringPointTracker;
 
 @Controller
 public class MainController {
@@ -48,6 +52,9 @@ public class MainController {
 
   @Autowired
   private ImageService imageService;
+
+  @Autowired
+  private MonitoringPointTracker tracker;
 
   @RequestMapping("/")
   public String index(Model model) {
@@ -118,13 +125,20 @@ public class MainController {
     httpServletResponse.sendRedirect(url);
   }
 
-  @RequestMapping("/concert")
+  @RequestMapping(name="/concert", method = {RequestMethod.GET})
   public String concert(@RequestParam Integer id, Model model) {
     model.addAttribute("concert", concertRepository.get(id));
     model.addAttribute("comments", commentRepository.getAllForConcert(id));
     return "concert";
   }
 
+  @RequestMapping(name="/concert", method = {RequestMethod.POST})
+  public ResponseEntity<String> post() {
+    // duplicate error handling to track issue
+    tracker.badMethod();
+    return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+  }
+  
   private void concertImageFromBlob(HttpServletResponse httpServletResponse, byte[] imageBlob)
       throws IOException {
     try (ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
