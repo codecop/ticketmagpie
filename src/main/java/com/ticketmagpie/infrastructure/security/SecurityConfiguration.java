@@ -9,14 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
-import org.owasp.appsensor.core.AppSensorClient;
-import org.owasp.appsensor.core.DetectionPoint;
-import org.owasp.appsensor.core.DetectionPoint.Category;
-import org.owasp.appsensor.core.DetectionSystem;
-import org.owasp.appsensor.core.Event;
-import org.owasp.appsensor.core.User;
-import org.owasp.appsensor.core.event.EventManager;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -27,12 +19,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Autowired
   private TicketMagPieRememberMeService ticketMagPieRememberMeService;
 
-  @Autowired 
-  private AppSensorClient appSensorClient;
-  
-  @Autowired 
-  private EventManager ids;
-    
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
@@ -49,25 +35,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .permitAll()
         .and()
           .logout()
-            .addLogoutHandler((req, res, auth) -> {
-              DetectionPoint detectionPoint = new DetectionPoint(Category.INPUT_VALIDATION, "IE1");
-              String userName = String.valueOf(auth.getPrincipal());
-              User user = new User(userName);
-              ids.addEvent(new Event(user, detectionPoint, getDetectionSystem()));
-              System.out.println("LOGOUT!!!!");
-            })
-            .permitAll()
+          .permitAll()
         .and()
           .rememberMe()
             .rememberMeServices(ticketMagPieRememberMeService)
     ;
   }
 
-  private DetectionSystem getDetectionSystem() {
-    return new DetectionSystem(
-        appSensorClient.getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderValue());
-  }
-  
   @Override
   protected void configure(AuthenticationManagerBuilder auth) {
     auth
