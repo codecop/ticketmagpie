@@ -18,8 +18,8 @@
 
     <detection-points>
         <detection-point>
-            <category>Input Validation</category>
-            <id>IE1</id>
+            <category>Authentication</category>
+            <id>AE3</id>
             <threshold>
                 <count>3</count>
                 <interval unit="minutes">5</interval>
@@ -27,9 +27,6 @@
             <responses>
                 <response>
                     <action>log</action>
-                </response>
-                <response>
-                    <action>logout</action>
                 </response>
                 <response>
                     <action>disableUser</action>
