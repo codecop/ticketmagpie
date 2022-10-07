@@ -16,17 +16,22 @@
     </client-applications>
 
     <rules>
-        <rule guid="foo">
+        <rule guid="00000000-0000-0000-0000-000000000000">
             <name>HttpHacking</name>
             <window unit="minutes">5</window>
             <expressions>
                 <expression>
+                    <window unit="minutes">2</window>
                     <clauses>
                         <clause>
                             <monitor-points>
-                                <monitor-point guid="foo1">
+                                <monitor-point guid="00000000-0000-0000-0000-000000000001">
                                     <category>Request</category>
                                     <id>RE2</id> <!-- unsupported HTTP method -->
+                                    <threshold>
+                                        <count>5</count>
+                                        <interval unit="minutes">1</interval>
+                                    </threshold>
                                 </monitor-point>
                             </monitor-points>
                         </clause>
