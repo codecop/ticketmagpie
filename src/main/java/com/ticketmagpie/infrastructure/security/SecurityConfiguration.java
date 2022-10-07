@@ -27,18 +27,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //Required if we ever want to include the app in an iframe
         .headers().disable()
         .authorizeRequests()
-          .antMatchers("/user/**").authenticated()
-          .anyRequest().permitAll()
+        .antMatchers("/user/**").authenticated()
+        .anyRequest().permitAll()
         .and()
-          .formLogin()
-            .loginPage("/login")
-            .permitAll()
+        .formLogin()
+        .loginPage("/login")
+        .permitAll()
         .and()
-          .logout()
-          .permitAll()
+        .logout()
+        .permitAll()
         .and()
-          .rememberMe()
-            .rememberMeServices(ticketMagPieRememberMeService)
+        .rememberMe()
+        .rememberMeServices(ticketMagPieRememberMeService)
     ;
   }
 
