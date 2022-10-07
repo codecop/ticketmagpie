@@ -131,6 +131,12 @@
             <artifactId>appsensor-access-control-reference</artifactId>
             <version>${appsensor.version}</version>
         </dependency>
+        <dependency>
+            <!-- for rules? -->
+            <groupId>org.owasp.appsensor</groupId>
+            <artifactId>appsensor-analysis-rules</artifactId>
+            <version>${appsensor.version}</version>
+        </dependency>
         <!-- 
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
