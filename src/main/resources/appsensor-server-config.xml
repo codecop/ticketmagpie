@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<appsensor-server-config xsi:noNamespaceSchemaLocation="appsensor_server_config_2.0.xsd">
+<appsensor-server-config
+    xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
 
     <client-application-identification-header-name>X-Appsensor-Client-Application-Name</client-application-identification-header-name>
 
@@ -14,37 +15,6 @@
             </roles>
         </client-application>
     </client-applications>
-
-    <rules>
-        <rule guid="00000000-0000-0000-0000-000000000000">
-            <name>HttpHacking</name>
-            <window unit="minutes">5</window>
-            <expressions>
-                <expression>
-                    <window unit="minutes">2</window>
-                    <clauses>
-                        <clause>
-                            <monitor-points>
-                                <monitor-point guid="00000000-0000-0000-0000-000000000001">
-                                    <category>Request</category>
-                                    <id>RE2</id> <!-- unsupported HTTP method -->
-                                    <threshold>
-                                        <count>5</count>
-                                        <interval unit="minutes">1</interval>
-                                    </threshold>
-                                </monitor-point>
-                            </monitor-points>
-                        </clause>
-                    </clauses>
-                </expression>
-            </expressions>
-            <responses>
-                <response>
-                    <action>log</action>
-                </response>
-            </responses>
-        </rule>
-    </rules>
 
     <detection-points>
         <detection-point>
@@ -145,5 +115,36 @@
             </responses>
         </detection-point>
     </detection-points>
+
+    <rules>
+        <rule guid="00000000-0000-0000-0000-000000000000">
+            <name>HttpHacking</name>
+            <window unit="minutes">5</window>
+            <expressions>
+                <expression>
+                    <window unit="minutes">2</window>
+                    <clauses>
+                        <clause>
+                            <monitor-points>
+                                <monitor-point guid="00000000-0000-0000-0000-000000000001">
+                                    <category>Request</category>
+                                    <id>RE2</id> <!-- unsupported HTTP method -->
+                                    <threshold>
+                                        <count>5</count>
+                                        <interval unit="minutes">1</interval>
+                                    </threshold>
+                                </monitor-point>
+                            </monitor-points>
+                        </clause>
+                    </clauses>
+                </expression>
+            </expressions>
+            <responses>
+                <response>
+                    <action>log</action>
+                </response>
+            </responses>
+        </rule>
+    </rules>
 
 </appsensor-server-config>
