@@ -3,6 +3,7 @@ package com.ticketmagpie;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 
+import java.net.URI;
 import java.net.URL;
 
 import org.junit.Before;
@@ -31,7 +32,7 @@ public class MainControllerIT {
 
   @Before
   public void setUp() throws Exception {
-    this.base = new URL(TestEnvironment.baseUrl("localhost", port));
+    this.base = new URI(TestEnvironment.baseUrl("localhost", port)).toURL();
     template = new TestRestTemplate();
   }
 
