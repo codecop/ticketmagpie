@@ -12,6 +12,7 @@ on:
 jobs:
   analyse:
     name: Analyse
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,7 +25,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Initialises the CodeQL tools for scanning.
     - name: Initialise CodeQL
