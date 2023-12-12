@@ -7,7 +7,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [9, 11, 13, 17, 21]
+        java-version: [11, 17, 21]
 
     name: Test with Java ${{ matrix.java-version }}
 
@@ -32,3 +32,6 @@ jobs:
 
       - name: Test with Maven
         run: mvn -Djava.version=${{ matrix.java-version }} -B clean test
+      - name: Run system tests
+        run: mvn -Djava.version=${{ matrix.java-version }} -B failsafe:integration-test failsafe:verify
+        
